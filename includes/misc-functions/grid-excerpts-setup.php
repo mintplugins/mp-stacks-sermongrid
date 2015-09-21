@@ -389,7 +389,7 @@ function mp_stacks_sermongrid_excerpt_animation_js( $existing_filter_output, $po
 	}
 		
 	//Get JS output to animate the excerpts on mouse over and out
-	$excerpt_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_animation_keyframes', array() ) ); 
+	$excerpt_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id ); 
 
 	return $existing_filter_output .= $excerpt_animation_js;
 }

@@ -54,7 +54,7 @@ function mp_sermongrid_ajax_load_more(){
 	$post_offset = $_POST['mp_stacks_grid_offset'];
 
 	//Because we run the same function for this and for "Load More" ajax, we call a re-usable function which returns the output
-	$sermongrid_output = mp_stacks_sermongrid_output( $post_id, $post_offset );
+	$sermongrid_output = mp_stacks_sermongrid_output( $post_id, true, $post_offset );
 	
 	echo json_encode( array(
 		'items' => $sermongrid_output['sermongrid_output'],
@@ -75,26 +75,24 @@ add_action( 'wp_ajax_nopriv_mp_stacks_sermongrid_load_more', 'mp_sermongrid_ajax
  * @since    1.0.0
  * @param    Void
  * @param    $post_id Int - The ID of the Brick
+ * @param    $loading_more string - If we are loading more through ajax, this will be true, Defaults to false.
  * @param    $post_offset Int - The number of posts deep we are into the loop (if doing ajax). If not doing ajax, set this to 0;
  * @return   Array - HTML output from the Grid Loop, The Load More Button, and the Animation Trigger in an array for usage in either ajax or not.
  */
-function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
+function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_offset = NULL ){
 	
 	global $wp_query;
 	
-	//Start up the PHP session if there isn't one already
-	if( !session_id() ){
-		session_start();
-	}
+	//Enqueue all js scripts used by grids.
+	mp_stacks_grids_enqueue_frontend_scripts( 'sermongrid' );
 	
 	//If we are NOT doing ajax get the parent's post id from the wp_query.
 	if ( !defined( 'DOING_AJAX' ) ){
 		$queried_object_id = $wp_query->queried_object_id;
-		$_SESSION['mp_stacks_sermongrid_queryobjid_' . $post_id] = $queried_object_id;
 	}
-	//If we are doing ajax, get the parent's post id from the PHP session where it was stored on initial the page load.
+	//If we are doing ajax, get the parent's post id from the AJAX-passed $_POST['mp_stacks_queried_object_id']
 	else{
-		$queried_object_id = $_SESSION['mp_stacks_sermongrid_queryobjid_' . $post_id];
+		$queried_object_id = isset( $_POST['mp_stacks_queried_object_id'] ) ? $_POST['mp_stacks_queried_object_id'] : NULL;
 	}
 	
 	//Get this Brick Info
@@ -234,13 +232,13 @@ function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
 	
 	//Download Image width and height
 	$sermongrid_featured_images_width = mp_core_get_post_meta( $post_id, 'sermongrid_featured_images_width', '500' );
-	$sermongrid_featured_images_height = mp_core_get_post_meta( $post_id, 'sermongrid_featured_images_height', '0' );
+	$sermongrid_featured_images_height = mp_core_get_post_meta( $post_id, 'sermongrid_featured_images_height', 0 );
 	
 	//Get the options for the grid placement - we pass this to the action filters for text placement
 	$grid_placement_options = apply_filters( 'mp_stacks_sermongrid_placement_options', NULL, $post_id );
 	
 	//Get the JS for animating items - only needed the first time we run this - not on subsequent Ajax requests.
-	if ( !defined('DOING_AJAX') ){
+	if ( !$loading_more ){
 		
 		//Here we set javascript for this grid
 		$sermongrid_output .= apply_filters( 'mp_stacks_grid_js', NULL, $post_id, 'sermongrid' );
@@ -248,10 +246,10 @@ function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
 	}
 	
 	//Add HTML that sits before the "grid" div
-	$sermongrid_output .= !defined('DOING_AJAX') ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'sermongrid', $sermongrid_taxonomy_terms ) : NULL; 
+	$sermongrid_output .= !$loading_more ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'sermongrid', $sermongrid_taxonomy_terms ) : NULL; 
 	
 	//Get Download Output
-	$sermongrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'sermongrid' ) . '">' : NULL;
+	$sermongrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'sermongrid' ) . '">' : NULL;
 			
 	//Create new query for stacks
 	$sermongrid_query = new WP_Query( apply_filters( 'sermongrid_args', $sermongrid_args ) );
@@ -324,8 +322,6 @@ function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
 					if ($sermongrid_featured_images_show){
 						
 						$sermongrid_output .= '<div class="mp-stacks-grid-item-image-holder">';
-						
-							$sermongrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
 							$link = get_permalink();
 							$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );	
@@ -334,6 +330,8 @@ function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
 							$target = 'mfp-width="1290px"';
 				
 							$sermongrid_output .= '<a mp_lightbox_alternate_url="' . $lightbox_link . '" href="' . $non_lightbox_link . '" class="' . $lightbox_class . '" ' . $target . ' class="mp-stacks-grid-image-link" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
+							
+							$sermongrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
 							//Get the featured image and crop according to the user's specs
 							if ( $sermongrid_featured_images_height > 0 && !empty( $sermongrid_featured_images_height ) ){
@@ -416,7 +414,7 @@ function mp_stacks_sermongrid_output( $post_id, $post_offset = NULL ){
 	}
 	
 	//If we're not doing ajax, add the stuff to close the sermongrid container and items needed after
-	if ( !defined('DOING_AJAX') ){
+	if ( !$loading_more ){
 		$sermongrid_output .= '</div>';
 	}
 	

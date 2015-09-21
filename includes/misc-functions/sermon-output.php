@@ -133,7 +133,7 @@ function mp_stacks_sermongrid_post_output(){
 					background-color:#f8f8f8;	
 				}
 				
-				@media (max-width: 1100px) {
+				@media (max-width: 900px) {
 					.outer-container{
 						display:inline-block;
 						width:100%;
@@ -269,7 +269,7 @@ function mp_stacks_sermongrid_post_output(){
 				}
 				.content-block.selected{
 					display:inline-block;	
-					
+					float:left;
 				}
 				
 				/*Description Block */
@@ -296,6 +296,7 @@ function mp_stacks_sermongrid_post_output(){
 					display:inline-block;	
 					width:45%;
 					margin-bottom:5%;
+					vertical-align:top;
 				}
 				.sermon:nth-child(odd){
 					margin-right:5%;
@@ -482,12 +483,31 @@ function mp_stacks_sermongrid_post_output(){
 					margin-left:0;	
 					width: inherit;
 				}
+				#mp-core-mobile-back-btn-container{
+					display:none;	
+				}
+				@media (max-width: 600px) {
+					#mp-core-mobile-back-btn-container{
+						display:block;	
+					}
+				}
 	
 			</style>
+            
+             <script>
+				function mp_core_go_back() {
+					window.history.back();
+				}
+			</script>
+
         </head>
         
         <body>
-                    
+        
+            <div id="mp-core-mobile-back-btn-container" style="background-color:#25272a; color:#fff; width=100%; font-size:45px;">
+                <div id="mp-core-back-btn-icon" onclick="mp_core_go_back()" style="padding:20px 10px 30px 20px; line-height: 1px;">&lsaquo;</div>
+            </div>       
+                         
             <div class="outer-container">   
             	
                 <div id="login-box">
@@ -533,7 +553,6 @@ function mp_stacks_sermongrid_post_output(){
                     </div>
                 </div>
                 
-                <div id="left-side"> 
                 <?php 
 				
 				//Get the popup Media Content URLs
@@ -573,26 +592,34 @@ function mp_stacks_sermongrid_post_output(){
 				elseif( !empty( $audio_value ) ){
 					$content_url = $audio_value;
 				}
+				else{
+					$content_url = NULL;	
+				}
                 
-				//Attempt to wrap the content in an HTML tag
-				$args = array(
-					'autoplay_videos' => true
-				);
+				if ( !empty( $content_url ) ){
 					
-				$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
-							
-				//If we were able to wrap the content, show it
-				if ( trim( $content_html ) != trim( $content_url ) ){
+					?><div id="left-side"><?php  
+					 
+					//Attempt to wrap the content in an HTML tag
+					$args = array(
+						'autoplay_videos' => true
+					);
+						
+					$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
+								
+					//If we were able to wrap the content, show it
+					if ( trim( $content_html ) != trim( $content_url ) ){
+						
+						echo $content_html;
+						
+						$media_to_show = true;
+					  
+					}else{
+						$media_to_show = false;	
+					}?>
 					
-					echo $content_html;
-					
-					$media_to_show = true;
-                  
-                }else{
-					$media_to_show = false;	
-				}?>
-                
-                </div>
+					</div>
+                <?php } ?>
                 <div id="right-side"> 
                 
                 	<?php 
@@ -627,7 +654,7 @@ function mp_stacks_sermongrid_post_output(){
                                 </time>
                             </div>
                             
-                            <span <?php if ( !$media_to_show ){ ?> style="font-size:30px;" <?php } ?>>
+                            <span>
                                 <h1 class="text"><?php echo $post_title; ?></h1>
                             </span>
                            
@@ -691,11 +718,14 @@ function mp_stacks_sermongrid_post_output(){
                              <?php echo __( 'Notes', 'mp_stacks_sermongrid' ); ?>
                         </div>
                        
-                        <div id="view-comments" class="links-block-item">
-                             <?php echo __( 'Discussion', 'mp_stacks_sermongrid' ); ?>
-                        </div>
+                        <?php 
+						//Check if comments are enabled for this event post.
+						if ( comments_open() ){ ?>
+                            <div id="view-comments" class="links-block-item">
+                                 <?php echo __( 'Discussion', 'mp_stacks_sermongrid' ); ?>
+                            </div>
+ 						<?php } 
                         
-                        <?php
                             //Get the series this sermon is a part of
                             $sermon_series = get_the_terms( $post_id, 'ctc_sermon_series' );
                             
@@ -720,22 +750,27 @@ function mp_stacks_sermongrid_post_output(){
                         
                     </div>
                     
-                    <div class="content-block comments">
+                    <?php 
+					//Check if comments are enabled for this event post.
+					if ( comments_open() ){ ?>
+					
+                        <div class="content-block comments">
+                            
+                            <div id="comments-container">
+                                <?php echo __( 'Loading Discusson...', 'mp_stacks_sermongrid' ); ?>
+                           </div>
+                            
+                           <div id="comment-form-container">
+                               <form action="<?php bloginfo( 'wpurl' ); ?>/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+                                   <input type="text" id="comment" name="comment" placeholder="<?php echo __( 'Leave a comment...', 'mp_stacks_sermongrid' ); ?>" aria-required="true"></textarea>
+                                   <input name="submit" type="submit" id="submit" value="Post">
+                                   <input type="hidden" name="comment_post_ID" value="<?php echo $post_id; ?>" id="comment_post_ID">
+                                   <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+                               </form>
+                           </div>
                         
-                        <div id="comments-container">
-                            <?php echo __( 'Loading Discusson...', 'mp_stacks_sermongrid' ); ?>
-                       </div>
-                        
-                       <div id="comment-form-container">
-                           <form action="<?php bloginfo( 'wpurl' ); ?>/wp-comments-post.php" method="post" id="commentform" class="comment-form">
-                               <input type="text" id="comment" name="comment" placeholder="<?php echo __( 'Leave a comment...', 'mp_stacks_sermongrid' ); ?>" aria-required="true"></textarea>
-                               <input name="submit" type="submit" id="submit" value="Post">
-                               <input type="hidden" name="comment_post_ID" value="<?php echo $post_id; ?>" id="comment_post_ID">
-                               <input type="hidden" name="comment_parent" id="comment_parent" value="0">
-                           </form>
-                       </div>
-                    
-                    </div>
+                        </div>
+                    <?php } ?>
                     
                     <div class="content-block series">
                         
@@ -755,6 +790,7 @@ function mp_stacks_sermongrid_post_output(){
                                 $sermon_series_args = array(
                                     'post_type' => "ctc_sermon",
                                     'posts_per_page' => -1,
+									'order' => 'asc',
                                     'tax_query' => array(
                                         'relation' => 'AND',
                                         array(
@@ -832,13 +868,18 @@ function mp_stacks_sermongrid_post_output(){
 							//Get the height of the title block
 							var title_block_height = $( '#title-block' ).css( 'height' ).replace('px', '');
 							var links_block_height = $( '#links-block' ).css( 'height' ).replace('px', '');	
-							var comment_form_container_height = $( '#comment-form-container' ).css( 'height' ).replace('px', '');		
+							var comment_form_container_height = $( '#comment-form-container' ).length > 0 ? $( '#comment-form-container' ).css( 'height' ).replace('px', '') : 0;		
 								
 							//Set the height of the content area by subtracting the height of the title area and the comment form area
-							$( '#comments-container' ).css( 'height', left_side_height - title_block_height - comment_form_container_height - links_block_height);
+							if ( $( '#comment-form-container' ).length > 0 ){
+								$( '#comments-container' ).css( 'height', left_side_height - title_block_height - comment_form_container_height - links_block_height);
+							}
 							
 							//Set the height of the content area by subtracting the height of the title area and the comment form area
-							$( '#description-container, #series-container' ).css( 'height', left_side_height - title_block_height - links_block_height);
+							$( '#description-container' ).css( 'height', left_side_height - title_block_height - links_block_height);
+							
+							//Set the height of the sermon series area by subtracting the height of the title area and the comment form area
+							$( '#series-container' ).css( 'height', left_side_height - title_block_height - links_block_height);
 							
 							content_set_loop_counter = content_set_loop_counter + 1;
 	

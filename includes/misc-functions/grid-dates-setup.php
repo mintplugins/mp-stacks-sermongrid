@@ -347,7 +347,7 @@ function mp_stacks_sermongrid_date_animation_js( $existing_filter_output, $post_
 	}
 	
 	//Get JS output to animate the dates on mouse over and out
-	$date_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-date-holder', mp_core_get_post_meta( $post_id, 'sermongrid_date_animation_keyframes', array() ) ); 
+	$date_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-date-holder', mp_core_get_post_meta( $post_id, 'sermongrid_date_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id ); 
 	
 	return $existing_filter_output .= $date_animation_js;
 }

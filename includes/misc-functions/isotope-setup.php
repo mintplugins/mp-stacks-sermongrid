@@ -71,24 +71,39 @@ function mp_stacks_sermongrid_isotope_filter_groups(){
 	
 	//This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.			
 	$isotope_filter_groups = array( 
-		'category' => array( 
+		'ctc_sermon_topic' => array( 
 			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Categories', 'mp_stacks_sermongrid' ),
-			'meta_field_ids_representing_tax_term' => array(
-				'category' => array()
-			),
-			//Icon info
-			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
-			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
-		),
-		'post_tag' => array(
-			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Post Tags', 'mp_stacks_sermongrid' ),
+			'filter_group_name' => __( 'Sermon Topics', 'mp_stacks_sermongrid' ),
 			'meta_field_ids_representing_tax_term' => array(),
 			//Icon info
 			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
 			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
 		),
+		'ctc_sermon_book' => array( 
+			'is_wordpress_taxonomy' => true,
+			'filter_group_name' => __( 'Sermon Books', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			//Icon info
+			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
+			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
+		),
+		'ctc_sermon_series' => array( 
+			'is_wordpress_taxonomy' => true,
+			'filter_group_name' => __( 'Sermon Series', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			//Icon info
+			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
+			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
+		),
+		'ctc_sermon_speaker' => array( 
+			'is_wordpress_taxonomy' => true,
+			'filter_group_name' => __( 'Sermon Speakers', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			//Icon info
+			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
+			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
+		),
+		
 	);
 	
 	$isotope_filter_groups = apply_filters( 'mp_stacks_sermongrid_isotope_filter_groups', $isotope_filter_groups );

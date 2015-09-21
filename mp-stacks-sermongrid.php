@@ -105,7 +105,7 @@ function mp_stacks_sermongrid_include_files(){
 	/**
 	 * If mp_core or mp_stacks aren't active, stop and install it now
 	 */
-	if (!function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain')){
+	if ( !function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain') || !class_exists( 'Church_Theme_Content' ) ){
 		
 		/**
 		 * Include Plugin Checker
@@ -127,6 +127,11 @@ function mp_stacks_sermongrid_include_files(){
 		 */
 		include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/mp-stacks.php' );
 		
+		/**
+		 * Check if Church Theme Content plugin is installed
+		 */
+		include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/church-theme-content.php' );
+		
 	}
 	/**
 	 * Otherwise, if mp_core and mp_stacks are active, carry out the plugin's functions
@@ -141,7 +146,7 @@ function mp_stacks_sermongrid_include_files(){
 		/**
 		 * enqueue scripts
 		 */
-		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/enqueue-scripts.php' );
+		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/admin-enqueue-scripts.php' );
 		
 		/**
 		 * HTML Content Filters for sermongrid

@@ -32,11 +32,15 @@ function mp_stacks_sermongrid_create_meta_box(){
 		'metabox_title' => __( '"SermonGrid" Content-Type', 'mp_stacks_sermongrid'), 
 		'metabox_posttype' => 'mp_brick', 
 		'metabox_context' => 'advanced', 
-		'metabox_priority' => 'low' 
+		'metabox_priority' => 'low',
+		'metabox_content_via_ajax' => true, 
 	);
 	
 	//Add "All" as the first option for sources for this grid
 	$sermon_categories['all'] = __( 'All Sermons', 'mp_stacks_sermongrid' );
+	
+	//Create the correct "Manage Sermons" link to match the MP Sermons
+	$manage_sermons_link = admin_url( 'edit.php?post_type=mp_sermon' );
 	
 	/**
 	 * Array which stores all info about the options within the metabox
@@ -49,6 +53,9 @@ function mp_stacks_sermongrid_create_meta_box(){
 			//Add the series to the list of source options for this grid
 			$sermon_categories[$term_id . '*ctc_sermon_series'] = $term_name;
 		}
+		
+		//Create the correct "Manage Sermons" link to match the CTC plugin.
+		$manage_sermons_link = admin_url( 'edit.php?post_type=ctc_sermon' );
 	}
 	
 	//Add "related" sermons
@@ -73,7 +80,7 @@ function mp_stacks_sermongrid_create_meta_box(){
 			'sermongrid_taxonomy' => array(
 				'field_id'			=> 'taxonomy_term',
 				'field_title' 	=> __( 'Select a Sermon Group you want to show', 'mp_stacks_sermongrid'),
-				'field_description' 	=> __( 'What group should be shown in the sermongrid?', 'mp_stacks_sermongrid' ),
+				'field_description' 	=> __( 'What group should be shown in the sermongrid?', 'mp_stacks_sermongrid' ) . ' (<a href="' . $manage_sermons_link . '" target="_blank">' . __( 'Manage Sermons', 'mp_stacks_sermongrid' ) . '</a>)',
 				'field_type' 	=> 'select',
 				'field_value' => '',
 				'field_select_values' => $sermon_categories,
@@ -418,7 +425,7 @@ function mp_stacks_sermongrid_create_meta_box(){
 		'sermongrid_podcasting_feedburner_url' => array(
 			'field_id'			=> 'sermongrid_podcasting_feedburner_url',
 			'field_title' 	=> __( 'Feedburner URL', 'mp_stacks_sermongrid'),
-			'field_description' 	=> __( 'By default, people can subscribe to your podcast by clicking the "Subscribe" button. If you want people to be able to find your podcast by searching in iTunes, set up your podcast on feedburner.com and paste the feed URL here. The URL to copy into feebdurner.com is ' . str_replace( get_bloginfo( 'wpurl' ) ) . '/sermons/feed/', 'mp_stacks_sermongrid' ),
+			'field_description' 	=> __( 'By default, people can subscribe to your podcast by clicking the "Subscribe" button. If you want people to be able to find your podcast by searching in iTunes, set up your podcast on feedburner.com and paste the feed URL here. The URL to copy into feebdurner.com is ' . get_bloginfo( 'wpurl' ) . '/sermons/feed/', 'mp_stacks_sermongrid' ),
 			'field_type' 	=> 'url',
 			'field_value' => '',
 			'field_showhider' => 'sermongrid_podcasting_showhider',
@@ -449,4 +456,5 @@ function mp_stacks_sermongrid_create_meta_box(){
 	global $mp_stacks_sermongrid_meta_box;
 	$mp_stacks_sermongrid_meta_box = new MP_CORE_Metabox($mp_stacks_sermongrid_add_meta_box, $mp_stacks_sermongrid_items_array);
 }
-add_action('mp_brick_metabox', 'mp_stacks_sermongrid_create_meta_box');
+add_action('mp_brick_ajax_metabox', 'mp_stacks_sermongrid_create_meta_box');
+add_action('wp_ajax_mp_stacks_sermongrid_metabox_content', 'mp_stacks_sermongrid_create_meta_box');

@@ -4,23 +4,13 @@
  *
  * @since 1.0.0
  *
- * @package    MP Stacks Features
+ * @package    MP Stacks SermonGrid
  * @subpackage Functions
  *
  * @copyright  Copyright (c) 2015, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
- 
-/**
-* Short Description
-*
-* @since    1.0.0
-* @link     http://mintplugins.com/doc/
-* @see      function_name()
-* @param    array $args See link for description.
-* @return   void
-*/
 
 /**
  * This function logs a user into WordPress via ajax
