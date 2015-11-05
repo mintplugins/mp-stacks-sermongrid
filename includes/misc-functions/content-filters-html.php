@@ -173,58 +173,81 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 		
 	}
 	
-	//If there are tax terms selected to show and one of those is "All Sermons"
-	if ( is_array( $sermongrid_taxonomy_terms ) && !empty( $sermongrid_taxonomy_terms[0]['taxonomy_term'] ) && $sermongrid_taxonomy_terms[0]['taxonomy_term'] == 'all' ){
-		//Don't do anything because it automatically will pull all of the sermon posts without adding anything extra at this point
-	}
-	//If there are tax terms selected to show
-	else if ( is_array( $sermongrid_taxonomy_terms ) && !empty( $sermongrid_taxonomy_terms[0]['taxonomy_term'] ) ){
+	//Check the load more behavior to make sure it ins't pagination
+	$load_more_behaviour = mp_core_get_post_meta($post_id, 'sermongrid' . '_load_more_behaviour', 'ajax_load_more' );
+	
+	//If we are loading from scratch based on a user's selection AND we are not using pagination as the "Load More" style (which won't work with this type of filtering)
+	if ( isset( $_POST['mp_stacks_grid_filter_tax'] ) && !empty( $_POST['mp_stacks_grid_filter_tax'] ) && isset( $_POST['mp_stacks_grid_filter_term'] ) && !empty( $_POST['mp_stacks_grid_filter_term'] ) && $load_more_behaviour != 'pagination' ){
 		
-		//Loop through each term the user added to this sermongrid
-		foreach( $sermongrid_taxonomy_terms as $sermongrid_taxonomy_term ){
+		$user_chosen_tax = $_POST['mp_stacks_grid_filter_tax'];
+		$user_chosen_term = $_POST['mp_stacks_grid_filter_term'];
 		
-			//If we should show related downloads
-			if ( $sermongrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
-				
-				$tags = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag' );
-				
-				if ( is_object( $tags ) ){
-					$tags_array = $tags;
-				}
-				elseif (is_array( $tags ) ){
-					$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
-				}
-				
-				$tag_slugs = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag', array("fields" => "slugs") );
-				
-				//Add the related tags as a tax_query to the WP_Query
-				$sermongrid_args['tax_query'][] = array(
-					'taxonomy' => 'ctc_sermon_tag',
-					'field'    => 'slug',
-					'terms'    => $tag_slugs,
-				);
-							
-			}
-			//If we should show a download category of the users choosing
-			else{
-				
-				//Explode the term and the tax name apart
-				$taxonomy_explode = explode( '*', $sermongrid_taxonomy_term['taxonomy_term'] );
-				$taxonomy_term_id = isset( $taxonomy_explode[0] ) ? $taxonomy_explode[0] : NULL;
-				$taxonomy_name = isset( $taxonomy_explode[1] ) ? $taxonomy_explode[1] : NULL;
-				
-				//Add the category we want to show to the WP_Query
-				$sermongrid_args['tax_query'][] = array(
-					'taxonomy' => $taxonomy_name,
-					'field'    => 'id',
-					'terms'    => $taxonomy_term_id,
-					'operator' => 'IN'
-				);		
-			}
+		if ( !empty( $user_chosen_tax ) && !empty( $user_chosen_term ) ){
+		
+			//Add the user chosen tax and term as a tax_query to the WP_Query
+			$sermongrid_args['tax_query'][] = array(
+				'taxonomy' => $user_chosen_tax,
+				'field'    => 'slug',
+				'terms'    => $user_chosen_term,
+			);
+		
 		}
+					
 	}
 	else{
-		return false;	
+		//If there are tax terms selected to show and one of those is "All Sermons"
+		if ( is_array( $sermongrid_taxonomy_terms ) && !empty( $sermongrid_taxonomy_terms[0]['taxonomy_term'] ) && $sermongrid_taxonomy_terms[0]['taxonomy_term'] == 'all' ){
+			//Don't do anything because it automatically will pull all of the sermon posts without adding anything extra at this point
+		}
+		//If there are tax terms selected to show
+		else if ( is_array( $sermongrid_taxonomy_terms ) && !empty( $sermongrid_taxonomy_terms[0]['taxonomy_term'] ) ){
+			
+			//Loop through each term the user added to this sermongrid
+			foreach( $sermongrid_taxonomy_terms as $sermongrid_taxonomy_term ){
+			
+				//If we should show related downloads
+				if ( $sermongrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
+					
+					$tags = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag' );
+					
+					if ( is_object( $tags ) ){
+						$tags_array = $tags;
+					}
+					elseif (is_array( $tags ) ){
+						$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+					}
+					
+					$tag_slugs = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag', array("fields" => "slugs") );
+					
+					//Add the related tags as a tax_query to the WP_Query
+					$sermongrid_args['tax_query'][] = array(
+						'taxonomy' => 'ctc_sermon_tag',
+						'field'    => 'slug',
+						'terms'    => $tag_slugs,
+					);
+								
+				}
+				//If we should show a download category of the users choosing
+				else{
+					
+					//Explode the term and the tax name apart
+					$taxonomy_explode = explode( '*', $sermongrid_taxonomy_term['taxonomy_term'] );
+					$taxonomy_term_id = isset( $taxonomy_explode[0] ) ? $taxonomy_explode[0] : NULL;
+					$taxonomy_name = isset( $taxonomy_explode[1] ) ? $taxonomy_explode[1] : NULL;
+					
+					//Add the category we want to show to the WP_Query
+					$sermongrid_args['tax_query'][] = array(
+						'taxonomy' => $taxonomy_name,
+						'field'    => 'id',
+						'terms'    => $taxonomy_term_id,
+						'operator' => 'IN'
+					);		
+				}
+			}
+		}
+		else{
+			return false;	
+		}
 	}
 	
 	//Show Download Images?
@@ -249,7 +272,7 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 	$sermongrid_output .= !$loading_more ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'sermongrid', $sermongrid_taxonomy_terms ) : NULL; 
 	
 	//Get Download Output
-	$sermongrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'sermongrid' ) . '">' : NULL;
+	$sermongrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'sermongrid' ) . '" ' . apply_filters( 'mp_stacks_grid_attributes', NULL, $post_id, 'sermongrid' ) . '>' : NULL;
 			
 	//Create new query for stacks
 	$sermongrid_query = new WP_Query( apply_filters( 'sermongrid_args', $sermongrid_args ) );
