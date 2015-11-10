@@ -318,7 +318,13 @@ function mp_stacks_sermongrid_date_below_over_callback( $sermongrid_output, $gri
 	//If we should show the date below the image
 	if ( strpos( $options['date_placement'], 'below') !== false && $options['date_show']){
 		
-		$date_html_output = '<a href="' . get_permalink() . '" class="mp-stacks-sermongrid-date-link">';	
+		$link = get_permalink();
+		$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );	
+		$non_lightbox_link = $link;
+		$lightbox_class = 'mp-stacks-iframe-height-match-lightbox-link';
+		$target = 'mfp-width="1290px"';
+							
+		$date_html_output = '<a mp_lightbox_alternate_url="' . $lightbox_link . '" href="' . $non_lightbox_link . '" ' . $target . ' class="mp-stacks-sermongrid-date-link ' . $lightbox_class . '" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
 			$date_html_output .= mp_stacks_sermongrid_date( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 		$date_html_output .= '</a>';
 		
