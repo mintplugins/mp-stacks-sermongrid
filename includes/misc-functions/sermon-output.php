@@ -745,7 +745,7 @@ function mp_stacks_sermongrid_post_output(){
                     <div class="content-block description selected">
                         
                         <div id="description-container">
-                            <?php echo nl2br( preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $post_description ) ); ?>
+                            <?php echo do_shortcode( $post_description ); ?>
                         </div>
                         
                     </div>
