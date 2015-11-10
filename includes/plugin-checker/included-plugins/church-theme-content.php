@@ -26,7 +26,7 @@ if (!function_exists('church_theme_content_plugin_check')){
 		$add_plugins = array(
 			array(
 				'plugin_name' => 'Church Theme Content',
-				'plugin_message' => __('You require the Church Theme Content plugin. Install it here.', 'mp_stacks_edd'),
+				'plugin_message' => __('You require the Church Theme Content plugin. Install it here.', 'mp_stacks_sermongrid'),
 				'plugin_filename' => 'church-theme-content.php',
 				'plugin_download_link' => '',
 				'plugin_info_link' => 'https://wordpress.org/plugins/church-theme-content/',
