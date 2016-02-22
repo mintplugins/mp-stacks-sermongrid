@@ -24,10 +24,6 @@ function mp_sermongrid_sermon_button($content) {
   	
 	//Set up post variables
 	$post_id = get_the_ID();
-	$sg_type = mp_core_get_post_meta( $post_id, 'sg_type' );
-	$sg_author = mp_core_get_post_meta( $post_id, 'sg_author' );
-	$sg_permalink = mp_core_get_post_meta( $post_id, 'sg_permalink' );
-	$sg_unique_id = mp_core_get_post_meta( $post_id, 'sg_unique_id' );
 	
 	$link = get_permalink();
 	
@@ -733,7 +729,7 @@ function mp_stacks_sermongrid_post_output(){
                             if ( is_array( $sermon_series ) ){?>
                         
                                 <div id="view-series" class="links-block-item">
-                                     <a id="view-permalink-btn" href="<?php echo $sg_permalink; ?>" target="_blank">
+                                     <a id="view-permalink-btn" target="_blank">
                                         <?php echo __( 'Other Sermons in this Series', 'mp_stacks_sermongrid' ); ?>
                                      </a>
                                 </div>
