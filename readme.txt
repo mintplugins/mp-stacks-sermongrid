@@ -35,6 +35,7 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 = 1.0.0.3 = February 21, 2016
 * Added Google Font controls for all Grid Text items.
+* Make Sermon Descriptions have proper spacing in sermon lightbox
 
 = 1.0.0.2 = November 10, 2015
 * Make Text Below Grid Image open in Lightbox by Default (previously just the featured image did this).
