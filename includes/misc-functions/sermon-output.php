@@ -696,7 +696,7 @@ function mp_stacks_sermongrid_post_output(){
 								}
 								
 								//Get a feed url for the podcast
-								$feed_url = mp_core_get_post_meta( $post_id, 'sermongrid_podcasting_feedburner_url', str_replace( 'http://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/sermons/feed/' ); 
+								$feed_url = mp_core_get_post_meta( $post_id, 'sermongrid_podcasting_feedburner_url', str_replace( 'http://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/' ); 
 								
 								//If this sermon has an uploaded mp3 file which will work in iTunes
 								if ( strpos( $audio_value, '.mp3' ) !== false ){ ?>
