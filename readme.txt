@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.4
-Stable tag: 1.0.0.3
+Tested up to: 4.5
+Stable tag: 1.0.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.4 = June 2, 2016
+* Reset rewrite rules upon activation
+* Change podcast feed URL from /sermons/ to /ctc-sermons/
 
 = 1.0.0.3 = February 21, 2016
 * Added Google Font controls for all Grid Text items.
