@@ -560,8 +560,12 @@ function mp_stacks_sermongrid_post_output(){
 				
 				//If a video has been entered
 				if ( !empty( $video_value ) ){
+					
+					if( strpos( $video_value, 'iframe' ) ) {
+						//Let it be.
+					}
 					//If the video is a youtube video, add custom formatting to the URL
-					if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $video_value, $match)) {
+					elseif (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $video_value, $match)) {
 						$youtube_video_id = $match[1];
 						$video_value = 'https://www.youtube.com/embed/' . $youtube_video_id . '?modestbranding=1&showinfo=0&rel=0&wmode=transparent&autohide=1&autoplay=1&fs=1';
 					}
