@@ -70,3 +70,20 @@ function mp_stacks_sermongrid_ctc_sermon_slug( $args ) {
 
 }
 add_filter( 'ctc_post_type_sermon_args', 'mp_stacks_sermongrid_ctc_sermon_slug' ); // register post type
+
+/**
+* Redirect the user to the correct feed URL if they are using the /sermons/feed url (it is now /ctc-sermons/feed)
+*/
+function mp_stacks_sermongrid_sermon_feed_redirect(){
+	
+	$current_url = mp_core_get_current_url();
+	
+	if ( strpos( $current_url, '/sermons/feed' ) === false ){
+		return false;
+	}
+	
+	wp_redirect( get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/', 301 ); 
+	exit;
+		
+}
+add_action( 'template_redirect', 'mp_stacks_sermongrid_sermon_feed_redirect' );
