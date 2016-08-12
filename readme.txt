@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 4.5
-Stable tag: 1.0.0.4
+Stable tag: 1.0.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.5 = August 12, 2016
+* Make it so that iframes entered for sermon videos retain all of their settings - like fullscreen attributes.
+* Redirect for sermon/feed/ to sermon-ctc/feed
 
 = 1.0.0.4 = June 2, 2016
 * Reset rewrite rules upon activation
