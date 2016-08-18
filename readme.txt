@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.5
-Stable tag: 1.0.0.5
+Tested up to: 4.6
+Stable tag: 1.0.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.6 = August 18, 2016
+* Set has_term to ctc_sermon_tag. Fixes bug introduced with WordPress 4.6
 
 = 1.0.0.5 = August 12, 2016
 * Make it so that iframes entered for sermon videos retain all of their settings - like fullscreen attributes.
