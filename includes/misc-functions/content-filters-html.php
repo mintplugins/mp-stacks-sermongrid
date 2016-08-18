@@ -300,7 +300,7 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 					foreach( $sermongrid_taxonomy_terms as $sermongrid_taxonomy_term ){
 																		
 						//If the current post has this term, make that term one of the classes for the grid item
-						if ( has_term( $sermongrid_taxonomy_term['taxonomy_term'], 'download_category', $grid_post_id ) ){
+						if ( has_term( $sermongrid_taxonomy_term['taxonomy_term'], 'ctc_sermon_tag', $grid_post_id ) ){
 							
 							//Store the source this post belongs to
 							$post_source_num = $source_counter;
