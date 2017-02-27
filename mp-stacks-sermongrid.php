@@ -3,7 +3,7 @@
 Plugin Name: MP Stacks + SermonGrid
 Plugin URI: http://mintplugins.com
 Description: Display Sermon Content in a Grid on a Church website using MP Stacks.
-Version: 1.0.0.6
+Version: 1.0.0.7
 Author: Mint Plugins
 Author URI: http://mintplugins.com
 Text Domain: mp_stacks_sermongrid
@@ -14,7 +14,7 @@ License: GPL2
 /*  Copyright 2016  Phil Johnston  (email : phil@mintplugins.com)
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Mint Plugins Core.
 
     This program is distributed in the hope that it will be useful,
@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_SERMONGRID_VERSION' ) )
-	define( 'MP_STACKS_SERMONGRID_VERSION', '1.0.0.6' );
+	define( 'MP_STACKS_SERMONGRID_VERSION', '1.0.0.7' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_SERMONGRID_PLUGIN_URL' ) )
@@ -106,63 +106,63 @@ function mp_stacks_sermongrid_include_files(){
 	 * If mp_core or mp_stacks aren't active, stop and install it now
 	 */
 	if ( !function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain') || !class_exists( 'Church_Theme_Content' ) ){
-		
+
 		/**
 		 * Include Plugin Checker
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . '/includes/plugin-checker/class-plugin-checker.php' );
-		
+
 		/**
 		 * Include Plugin Installer
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . '/includes/plugin-checker/class-plugin-installer.php' );
-		
+
 		/**
 		 * Check if mp_core in installed
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/mp-core-check.php' );
-		
+
 		/**
 		 * Check if mp_stacks is installed
 		 */
 		include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/mp-stacks.php' );
-		
+
 		/**
 		 * Check if Church Theme Content plugin is installed
 		 */
 		include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/church-theme-content.php' );
-		
+
 	}
 	/**
 	 * Otherwise, if mp_core and mp_stacks are active, carry out the plugin's functions
 	 */
 	else{
-		
+
 		/**
 		 * Update script - keeps this plugin up to date
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/updater/mp-stacks-sermongrid-update.php' );
-		
+
 		/**
 		 * enqueue scripts
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/admin-enqueue-scripts.php' );
-		
+
 		/**
 		 * HTML Content Filters for sermongrid
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/content-filters-html.php' );
-		
+
 		/**
 		 * CSS Content Filters for sermongrid
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/content-filters-css.php' );
-		
+
 		/**
 		 * Metabox for sermongrid
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/metaboxes/mp-stacks-sermongrid-meta/mp-stacks-sermongrid-meta.php' );
-		
+
 		/**
 		 * Add this add on to the list of Active MP Stacks Add Ons
 		 */
@@ -173,52 +173,52 @@ function mp_stacks_sermongrid_include_files(){
 			}
 			add_filter( 'mp_stacks_active_add_ons', 'mp_stacks_sermongrid_add_active' );
 		}
-		
+
 		/**
 		 * Metabox which adds sermongrid as a content type
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/metaboxes/mp-stacks-content/mp-stacks-content.php' );
-		
+
 		/**
-		 * Misc Functions 
+		 * Misc Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/misc-functions.php' );
-		
+
 		/**
 		 * Include all Grid Title Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/grid-titles-setup.php' );
-		
+
 		/**
 		 * Include all Grid Excerpt Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/grid-excerpts-setup.php' );
-		
+
 		/**
 		 * Include all Grid Price Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/grid-dates-setup.php' );
-		
+
 		/**
 		 * Include all Isotope JS Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/isotope-setup.php' );
-		
+
 		/**
 		 * Include all "Load More" Functions
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/load-more-setup.php' );
-		
+
 		/**
 		 * Include all Sermoun Output
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/sermon-output.php' );
-		
+
 		/**
 		 * Include all Ajax Callbacks
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/ajax-callbacks.php' );
-				
+
 	}
 }
 add_action('plugins_loaded', 'mp_stacks_sermongrid_include_files', 9);
