@@ -558,6 +558,8 @@ function mp_stacks_sermongrid_post_output(){
                 $video_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_video' );
 				$audio_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_audio' );
 
+				$audio_only = false;
+
 				//If a video has been entered
 				if ( !empty( $video_value ) ){
 
@@ -594,6 +596,7 @@ function mp_stacks_sermongrid_post_output(){
 				//If only audio has been entered without a video
 				elseif( !empty( $audio_value ) ){
 					$content_url = $audio_value;
+					$audio_only = true;
 				}
 				else{
 					$content_url = NULL;
@@ -608,7 +611,12 @@ function mp_stacks_sermongrid_post_output(){
 						'autoplay_videos' => true
 					);
 
-					$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
+					// If we are on an iPhone, it handled HTML5 player strangely, so output a link only.
+					if( mp_core_is_iphone() && $audio_only ){
+						$content_html = '<a style="width:100%; height:250px; text-align:center; font-size:180px; color:#545454;" href="' . $content_url . '">&#9658;</a>';
+					}else{
+						$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
+					}
 
 					//If we were able to wrap the content, show it
 					if ( trim( $content_html ) != trim( $content_url ) ){
