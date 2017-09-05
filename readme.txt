@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.7
-Stable tag: 1.0.0.7
+Tested up to: 4.8
+Stable tag: 1.0.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.8 = September 4, 2017
+* Make audio-only sermons display better on iPhone
 
 = 1.0.0.7 = Feburay 27, 2017
 * Add podcast disable filter
