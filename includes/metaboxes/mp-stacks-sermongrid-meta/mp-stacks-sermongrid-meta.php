@@ -12,7 +12,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author      Philip Johnston
  */
- 
+
 /**
  * Add SermonGrid as a Media Type to the dropdown
  *
@@ -22,54 +22,54 @@
  * @return   void
  */
 function mp_stacks_sermongrid_create_meta_box(){
-			
+
 	/**
 	 * Array which stores all info about the new metabox
 	 *
 	 */
 	$mp_stacks_sermongrid_add_meta_box = array(
-		'metabox_id' => 'mp_stacks_sermongrid_metabox', 
-		'metabox_title' => __( '"SermonGrid" Content-Type', 'mp_stacks_sermongrid'), 
-		'metabox_posttype' => 'mp_brick', 
-		'metabox_context' => 'advanced', 
+		'metabox_id' => 'mp_stacks_sermongrid_metabox',
+		'metabox_title' => __( '"SermonGrid" Content-Type', 'mp_stacks_sermongrid'),
+		'metabox_posttype' => 'mp_brick',
+		'metabox_context' => 'advanced',
 		'metabox_priority' => 'low',
-		'metabox_content_via_ajax' => true, 
+		'metabox_content_via_ajax' => true,
 	);
-	
+
 	//Add "All" as the first option for sources for this grid
 	$sermon_categories['all'] = __( 'All Sermons', 'mp_stacks_sermongrid' );
-	
+
 	//Create the correct "Manage Sermons" link to match the MP Sermons
 	$manage_sermons_link = admin_url( 'edit.php?post_type=mp_sermon' );
-	
+
 	/**
 	 * Array which stores all info about the options within the metabox
 	 *
 	 */
 	if ( class_exists( 'Church_Theme_Content' ) ){
-		$ctc_sermon_series = mp_core_get_all_terms_by_tax('ctc_sermon_series'); 
+		$ctc_sermon_series = mp_core_get_all_terms_by_tax('ctc_sermon_series');
 		//Loop through each sermon series
 		foreach( $ctc_sermon_series as $term_id => $term_name ){
 			//Add the series to the list of source options for this grid
 			$sermon_categories[$term_id . '*ctc_sermon_series'] = $term_name;
 		}
-		
+
 		//Create the correct "Manage Sermons" link to match the CTC plugin.
 		$manage_sermons_link = admin_url( 'edit.php?post_type=ctc_sermon' );
 	}
-	
+
 	//Add "related" sermons
 	$sermon_categories['related_sermons'] = __('Show Related Sermons based on Tag (only use this if the stack is sitting on a "Sermon" post).');
-	
+
 	/**
 	 * Array which stores all info about the options within the metabox
 	 *
 	 */
 	$mp_stacks_sermongrid_items_array = array(
-	
+
 		//Use this to add new options at this point with the filter hook
 		'sermongrid_meta_hook_anchor_0' => array( 'field_type' => 'hook_anchor'),
-		
+
 		'sermongrid_taxonomy_showhider' => array(
 			'field_id'			=> 'sermongrid_taxonomy_showhider',
 			'field_title' 	=> __( 'Sermons To Show', 'mp_stacks_sermongrid'),
@@ -96,7 +96,7 @@ function mp_stacks_sermongrid_create_meta_box(){
 				'field_repeater' => 'sermongrid_taxonomy_terms',
 				'field_showhider' => 'sermongrid_taxonomy_showhider'
 			),
-			
+
 
 		'sermongrid_layout_showhider' => array(
 			'field_id'			=> 'sermongrid_layout_settings',
@@ -227,10 +227,10 @@ function mp_stacks_sermongrid_create_meta_box(){
 				'field_repeater' => 'sermongrid_bg_animation_keyframes',
 				'field_showhider' => 'sermongrid_bg_settings',
 			),
-		
+
 		//Use this to add new options at this point with the filter hook
 		'sermongrid_meta_hook_anchor_1' => array( 'field_type' => 'hook_anchor'),
-		
+
 		'sermongrid_feat_img_showhider' => array(
 			'field_id'			=> 'sermongrid_featured_images_settings',
 			'field_title' 	=> __( 'Featured Images Settings', 'mp_stacks_sermongrid'),
@@ -357,8 +357,8 @@ function mp_stacks_sermongrid_create_meta_box(){
 			'field_repeater' => 'sermongrid_image_animation_keyframes',
 			'field_showhider' => 'sermongrid_featured_images_settings',
 		),
-		
-		
+
+
 		//Image Overlay
 		'sermongrid_feat_img_overlay_showhider' => array(
 			'field_id'			=> 'sermongrid_featured_images_overlay_settings',
@@ -375,7 +375,7 @@ function mp_stacks_sermongrid_create_meta_box(){
 			'field_value' => '',
 			'field_showhider' => 'sermongrid_featured_images_overlay_settings',
 		),
-		
+
 		//Image Overlay animation stuff
 		'sermongrid_feat_img_overlay_animation_repeater_title' => array(
 			'field_id'			=> 'sermongrid_image_animation_repeater_title',
@@ -413,43 +413,26 @@ function mp_stacks_sermongrid_create_meta_box(){
 			'field_repeater' => 'sermongrid_image_overlay_animation_keyframes',
 			'field_showhider' => 'sermongrid_featured_images_overlay_settings',
 		),
-		
-		//Podcasting
-		'sermongrid_podcasting_showhider' => array(
-			'field_id'			=> 'sermongrid_podcasting_showhider',
-			'field_title' 	=> __( 'Podcasting (Optional)', 'mp_stacks_sermongrid'),
-			'field_description' 	=> __( '', 'mp_stacks_sermongrid' ),
-			'field_type' 	=> 'showhider',
-			'field_value' => '',
-		),
-		'sermongrid_podcasting_feedburner_url' => array(
-			'field_id'			=> 'sermongrid_podcasting_feedburner_url',
-			'field_title' 	=> __( 'Feedburner URL', 'mp_stacks_sermongrid'),
-			'field_description' 	=> __( 'By default, people can subscribe to your podcast by clicking the "Subscribe" button. If you want people to be able to find your podcast by searching in iTunes, set up your podcast on feedburner.com and paste the feed URL here. The URL to copy into feebdurner.com is ' . get_bloginfo( 'wpurl' ) . '/sermons/feed/', 'mp_stacks_sermongrid' ),
-			'field_type' 	=> 'url',
-			'field_value' => '',
-			'field_showhider' => 'sermongrid_podcasting_showhider',
-		),
-		
+
 		//Use this to add new options at this point with the filter hook
 		'sermongrid_meta_hook_anchor_2' => array( 'field_type' => 'hook_anchor'),
-		
+
 		//Use this to add new options at this point with the filter hook
 		'sermongrid_meta_hook_anchor_3' => array( 'field_type' => 'hook_anchor'),
-		
+
 	);
-	
-	
+
+
 	/**
 	 * Custom filter to allow for add-on plugins to hook in their own data for add_meta_box array
 	 */
 	$mp_stacks_sermongrid_add_meta_box = has_filter('mp_stacks_sermongrid_meta_box_array') ? apply_filters( 'mp_stacks_sermongrid_meta_box_array', $mp_stacks_sermongrid_add_meta_box) : $mp_stacks_sermongrid_add_meta_box;
-	
+
 	/**
-	 * Custom filter to allow for add on plugins to hook in their own extra fields 
+	 * Custom filter to allow for add on plugins to hook in their own extra fields
 	 */
 	$mp_stacks_sermongrid_items_array = has_filter('mp_stacks_sermongrid_items_array') ? apply_filters( 'mp_stacks_sermongrid_items_array', $mp_stacks_sermongrid_items_array) : $mp_stacks_sermongrid_items_array;
-	
+
 	/**
 	 * Create Metabox class
 	 */
