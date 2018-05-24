@@ -1,8 +1,8 @@
-<?php 
+<?php
 /**
  * This file contains the function which set up the Excerpts in the Grid
  *
- * To use this for additional Text Overlays in a grid, duplicate this file 
+ * To use this for additional Text Overlays in a grid, duplicate this file
  * 1. Find and replace "sermongrid" with your plugin's prefix
  * 2. Find and replace "excerpt" with your desired text overlay name
  * 3. Make custom changes to the mp_stacks_sermongrid_excerpt function about what is displayed.
@@ -26,8 +26,8 @@
  * @param    $items_array Array - The existing Meta Options in this Array
  * @return   Array - All of the placement optons needed for Excerpt
  */
-function mp_stacks_sermongrid_excerpt_meta_options( $items_array ){		
-	
+function mp_stacks_sermongrid_excerpt_meta_options( $items_array ){
+
 	//Excerpt Settings
 	$new_fields = array(
 		//Excerpt
@@ -79,7 +79,7 @@ function mp_stacks_sermongrid_excerpt_meta_options( $items_array ){
 			'field_value' => '19',
 			'field_showhider' => 'sermongrid_excerpt_settings',
 		),
-		
+
 		'sermongrid_excerpt_google_font' => array(
 			'field_id'			=> 'sermongrid_excerpt_google_font',
 			'field_title' 	=> __( 'Google Font Name', 'mp_stacks'),
@@ -94,20 +94,20 @@ function mp_stacks_sermongrid_excerpt_meta_options( $items_array ){
 			'field_title' 	=> __( 'Font Weight/Style', 'mp_stacks'),
 			'field_description' 	=> 'Set the weight of this font (If available for your chosen font)',
 			'field_type' 	=> 'select',
-			'field_select_values' => array( 
-				'100' => 'Thin', 
-				'200' => 'Extra-Light', 
-				'300' => 'Light', 
-				'400' => 'Normal', 
-				'500' => 'Medium', 
-				'600' => 'Semi-Bold', 
+			'field_select_values' => array(
+				'100' => 'Thin',
+				'200' => 'Extra-Light',
+				'300' => 'Light',
+				'400' => 'Normal',
+				'500' => 'Medium',
+				'600' => 'Semi-Bold',
 				'700' => 'Bold',
-				'900' => 'Ultra-Bold', 
+				'900' => 'Ultra-Bold',
 			),
 			'field_value' => '',
 			'field_showhider' => 'sermongrid_excerpt_settings',
 		),
-		
+
 		'sermongrid_excerpt_spacing' => array(
 			'field_id'			=> 'sermongrid_excerpt_spacing',
 			'field_title' 	=> __( 'Excerpts\' Spacing', 'mp_stacks_sermongrid'),
@@ -237,7 +237,7 @@ function mp_stacks_sermongrid_excerpt_meta_options( $items_array ){
 		),
 
 	);
-	
+
 	return mp_core_insert_meta_fields( $items_array, $new_fields, 'sermongrid_meta_hook_anchor_2' );
 
 }
@@ -253,20 +253,25 @@ add_filter( 'mp_stacks_sermongrid_items_array', 'mp_stacks_sermongrid_excerpt_me
  * @return   Array - All of the placement optons needed for Excerpt
  */
 function mp_stacks_sermongrid_excerpt_placement_options( $placement_options, $post_id ){
-	
+
 	//Show Post Excerpts
 	$placement_options['excerpt_show'] = mp_core_get_post_meta($post_id, 'sermongrid_excerpt_show');
 
 	//Excerpts Placement
 	$placement_options['excerpt_placement'] = mp_core_get_post_meta($post_id, 'sermongrid_excerpt_placement', 'below_image_left');
-	
+
 	//get word limit for exceprts
 	$placement_options['word_limit'] = mp_core_get_post_meta($post_id, 'sermongrid_excerpt_word_limit', 20);
-	
+
 	//Get Read More Text for excerpts
 	$placement_options['read_more_text'] = mp_core_get_post_meta($post_id, 'sermongrid_excerpt_read_more_text', __( '[Read More]', 'mp_stacks_sermongrid' ) );
-	
-	return $placement_options;	
+
+	// Maybe add Read More text
+	if ( '*****' == $placement_options['read_more_text'] ) {
+		$placement_options['read_more_text'] = '';
+	}
+
+	return $placement_options;
 }
 add_filter( 'mp_stacks_sermongrid_placement_options', 'mp_stacks_sermongrid_excerpt_placement_options', 10, 2 );
 
@@ -281,34 +286,34 @@ add_filter( 'mp_stacks_sermongrid_placement_options', 'mp_stacks_sermongrid_exce
  * @return   $html_output String - A string holding the html for an excerpt in the grid
  */
 function mp_stacks_sermongrid_excerpt( $post_id, $word_limit, $read_more_text = NULL ){
-	
+
 	$the_excerpt = mp_core_get_excerpt_by_id($post_id);
-	
-	//Check word limit for excerpt				
-	if (!empty($word_limit)){							
+
+	//Check word limit for excerpt
+	if (!empty($word_limit)){
 		//Cut the excerpt off at X number of words
 		$the_excerpt = mp_core_limit_text_to_words($the_excerpt, $word_limit);
 	}
-	
+
 	//If there are 0 words in this excerpt
 	if (mp_core_word_count($the_excerpt) == 0 ){
-		return NULL;	
+		return NULL;
 	}
 	else{
-		
+
 		$output_string = strip_tags($the_excerpt);
-		
+
 		$output_string .= !empty( $read_more_text ) ? '<span class="mp-stacks-sermongrid-read-more">' . $read_more_text . '</span>' : NULL;
-		
+
 	}
-	
-	$sermongrid_output = mp_stacks_grid_highlight_text_html( array( 
+
+	$sermongrid_output = mp_stacks_grid_highlight_text_html( array(
 		'class_name' => 'mp-stacks-sermongrid-item-excerpt',
-		'output_string' => $output_string, 
+		'output_string' => $output_string,
 	) );
-	
-	return $sermongrid_output;	
-	
+
+	return $sermongrid_output;
+
 }
 
 /**
@@ -320,16 +325,16 @@ function mp_stacks_sermongrid_excerpt( $post_id, $word_limit, $read_more_text = 
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_excerpt_top_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the excerpt over the image
 	if ( strpos( $options['excerpt_placement'], 'over') !== false && strpos( $options['excerpt_placement'], 'top') !== false && $options['excerpt_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_excerpt( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_top_over', 'mp_stacks_sermongrid_excerpt_top_over_callback', 15, 3 );
 
@@ -342,14 +347,14 @@ add_filter( 'mp_stacks_sermongrid_top_over', 'mp_stacks_sermongrid_excerpt_top_o
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_excerpt_middle_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the excerpt over the image
 	if ( strpos( $options['excerpt_placement'], 'over') !== false && strpos( $options['excerpt_placement'], 'middle') !== false && $options['excerpt_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_excerpt( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
 }
 add_filter( 'mp_stacks_sermongrid_middle_over', 'mp_stacks_sermongrid_excerpt_middle_over_callback', 15, 3 );
@@ -363,16 +368,16 @@ add_filter( 'mp_stacks_sermongrid_middle_over', 'mp_stacks_sermongrid_excerpt_mi
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_excerpt_bottom_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the excerpt over the image
 	if ( strpos( $options['excerpt_placement'], 'over') !== false && strpos( $options['excerpt_placement'], 'bottom') !== false && $options['excerpt_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_excerpt( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_bottom_over', 'mp_stacks_sermongrid_excerpt_bottom_over_callback', 15, 3 );
 
@@ -385,26 +390,26 @@ add_filter( 'mp_stacks_sermongrid_bottom_over', 'mp_stacks_sermongrid_excerpt_bo
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_excerpt_below_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the excerpt below the image
 	if ( strpos( $options['excerpt_placement'], 'below') !== false && $options['excerpt_show']){
-		
-			
+
+
 		$link = get_permalink();
-		$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );	
+		$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );
 		$non_lightbox_link = $link;
 		$lightbox_class = 'mp-stacks-iframe-height-match-lightbox-link';
 		$target = 'mfp-width="1290px"';
-							
+
 		$excerpt_html_output = '<a mp_lightbox_alternate_url="' . $lightbox_link . '" href="' . $non_lightbox_link . '" ' . $target . ' class="mp-stacks-sermongrid-excerpt-link ' . $lightbox_class . '" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
 			$excerpt_html_output .= mp_stacks_sermongrid_excerpt( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 		$excerpt_html_output .= '</a>';
-		
+
 		return $sermongrid_output . $excerpt_html_output;
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_below', 'mp_stacks_sermongrid_excerpt_below_over_callback', 15, 3 );
 
@@ -419,18 +424,18 @@ add_filter( 'mp_stacks_sermongrid_below', 'mp_stacks_sermongrid_excerpt_below_ov
  * @return   $new_grid_output - the existing grid output with additional thigns added by this function.
  */
 function mp_stacks_sermongrid_excerpt_animation_js( $existing_filter_output, $post_id, $meta_prefix ){
-	
+
 	if ( $meta_prefix != 'sermongrid' ){
-		return $existing_filter_output;	
+		return $existing_filter_output;
 	}
-		
+
 	//Get JS output to animate the excerpts on mouse over and out
-	$excerpt_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id ); 
+	$excerpt_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id );
 
 	return $existing_filter_output .= $excerpt_animation_js;
 }
 add_filter( 'mp_stacks_grid_js', 'mp_stacks_sermongrid_excerpt_animation_js', 10, 3 );
-		
+
 /**
  * Add the CSS for the excerpt to SermonGrid's CSS
  *
@@ -440,7 +445,7 @@ add_filter( 'mp_stacks_grid_js', 'mp_stacks_sermongrid_excerpt_animation_js', 10
  * @return   $css_output String - The incoming CSS with our new CSS for the excerpt appended.
  */
 function mp_stacks_sermongrid_excerpt_css( $css_output, $post_id ){
-	
+
 	$excerpt_css_defaults = array(
 		'color' => NULL,
 		'size' => 15,
@@ -466,35 +471,35 @@ add_filter('mp_stacks_sermongrid_css', 'mp_stacks_sermongrid_excerpt_css', 10, 2
  * @return   $css_output          String - A string holding the css the brick
  */
 function mp_stacks_sermongrid_excerpt_google_font( $css_output, $post_id, $first_content_type, $second_content_type ){
-	
+
 	if ( $first_content_type != 'sermongrid' && $second_content_type != 'sermongrid' ){
-		return $css_output;	
+		return $css_output;
 	}
-	
+
 	global $mp_stacks_footer_inline_css, $mp_core_font_families;
-	
+
 	//Default settings for the MP Core Google Font Class
 	$mp_core_google_font_args = array( 'echo_google_font_css' => false, 'wrap_in_style_tags' => false );
-	
+
 	$sermongrid_excerpt_googlefont = mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_google_font' );
 	$sermongrid_excerpt_googlefontweight = mp_core_get_post_meta( $post_id, 'sermongrid_excerpt_google_font_weight_style' );
-	
+
 	//If a font name has been entered
 	if ( !empty( $sermongrid_excerpt_googlefont ) ){
-		
+
 		//Check if a font extra (weight) has been selected and add it if so.
 		$sermongrid_excerpt_googlefontweight = isset($sermongrid_excerpt_googlefontweight) && !empty( $sermongrid_excerpt_googlefontweight ) ? ':' . $sermongrid_excerpt_googlefontweight : NULL;
 		$sermongrid_excerpt_googlefont = $sermongrid_excerpt_googlefont . $sermongrid_excerpt_googlefontweight;
-	
+
 		//Load the Google Font using the Google Font Class in MP Core
 		new MP_CORE_Font( $sermongrid_excerpt_googlefont, $sermongrid_excerpt_googlefont, $mp_core_google_font_args );
 		$mp_stacks_footer_inline_css[$sermongrid_excerpt_googlefont] = $mp_core_font_families[$sermongrid_excerpt_googlefont];
-		
+
 		//Return the incoming css string plus css to apply this font family to all paragraph tags
 		$css_output .=  '#mp-brick-' . $post_id . ' .mp-stacks-sermongrid-item-excerpt, #mp-brick-' . $post_id . ' .mp-stacks-sermongrid-item-excerpt * { font-family: \'' . $sermongrid_excerpt_googlefont . '\';}';
-	
+
 	}
-	
-	return $css_output;	
+
+	return $css_output;
 }
-add_filter('mp_brick_additional_css', 'mp_stacks_sermongrid_excerpt_google_font', 10, 4);	
+add_filter('mp_brick_additional_css', 'mp_stacks_sermongrid_excerpt_google_font', 10, 4);
