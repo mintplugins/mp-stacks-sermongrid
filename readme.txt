@@ -33,6 +33,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.0.9 = May 24, 2018
+* Fix Read More output on SermonGrid excerpts
+* Add filter for podcast feed url to allow for custom podcast URLs
+
 = 1.0.0.8 = September 4, 2017
 * Make audio-only sermons display better on iPhone
 
