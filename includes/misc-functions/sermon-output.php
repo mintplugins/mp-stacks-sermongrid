@@ -677,7 +677,7 @@ function mp_stacks_sermongrid_post_output(){
 
                              	<?php
 
-								if ( strpos( $audio_value, '.mp3' ) !== false ){ ?>
+								if ( ! empty( $audio_value ) ){ ?>
 
                                     <a href="<?php echo $audio_value; ?>" class="download-item mp3-button" target="_blank">
                                         <div class="download-item-container">
