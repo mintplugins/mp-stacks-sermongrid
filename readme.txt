@@ -33,6 +33,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.1.0 = February 7, 2019
+* Make sermon MP3 show even if link entered isn’t an MP3. This allows for linking to sites like SoundCloud.
+
 = 1.0.0.9 = May 24, 2018
 * Fix Read More output on SermonGrid excerpts
 * Add filter for podcast feed url to allow for custom podcast URLs
