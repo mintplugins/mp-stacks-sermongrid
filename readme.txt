@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 1.0.0.8
+Tested up to: 5.3
+Stable tag: 1.0.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.1 = April 12, 2019
+* Improve Podcast subscribe experience by providing easy-to-follow routes for iTunes, other podcasting apps, and if you have no podcasting app yet.
+* Removed confusing admin pages from ctc
 
 = 1.0.1.0 = February 7, 2019
 * Make sermon MP3 show even if link entered isn’t an MP3. This allows for linking to sites like SoundCloud.
