@@ -33,6 +33,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.1.2 = April 12, 2019
+* Podcast UX improvements (copy text js, feed://on iphone)
+
 = 1.0.1.1 = April 12, 2019
 * Improve Podcast subscribe experience by providing easy-to-follow routes for iTunes, other podcasting apps, and if you have no podcasting app yet.
 * Removed confusing admin pages from ctc
