@@ -210,9 +210,10 @@ function mp_stacks_sermongrid_include_files(){
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/load-more-setup.php' );
 
 		/**
-		 * Include all Sermoun Output
+		 * Include all Sermon Output
 		 */
 		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/sermon-output.php' );
+		require( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/misc-functions/podcast-output.php' );
 
 		/**
 		 * Include all Ajax Callbacks
