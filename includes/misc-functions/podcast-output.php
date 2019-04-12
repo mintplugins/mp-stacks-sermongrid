@@ -26,8 +26,20 @@ function mp_sermongrid_podcast_output() {
 		return;
 	}
 
-	$itunes_url = str_replace( 'http://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
-	$itunes_url = str_replace( 'https://', 'itpc://', $itunes_url );
+	if ( ! is_ssl() ) {
+		$itunes_url = str_replace( 'http://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+	} else {
+		$itunes_url = str_replace( 'https://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+	}
+
+	// If we are on iPhone
+	if ( mp_core_is_iphone() ) {
+		if ( ! is_ssl() ) {
+			$itunes_url = str_replace( 'http://', 'feed://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+		} else {
+			$itunes_url = str_replace( 'https://', 'feed://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+		}
+	}
 
 	ob_get_clean();
 	ob_start();
@@ -77,6 +89,7 @@ function mp_sermongrid_podcast_output() {
 
 				/* Global Button Styles */
 				.animated-button {
+					font-size: 18px;
 					position: relative;
 					display: block;
 					padding: 14px 15px;
@@ -91,26 +104,6 @@ function mp_sermongrid_podcast_output() {
 					-o-transition: all 1s ease;
 					transition: all 1s ease;
 				}
-				.animated-button:link:after, .animated-button:visited:after {
-					content: "";
-					position: absolute;
-					height: 0%;
-					left: 50%;
-					top: 50%;
-					width: 150%;
-					z-index: -1;
-					-webkit-transition: all 0.75s ease 0s;
-					-moz-transition: all 0.75s ease 0s;
-					-o-transition: all 0.75s ease 0s;
-					transition: all 0.75s ease 0s;
-				}
-				.animated-button:link:hover, .animated-button:visited:hover {
-					color: #FFF;
-					text-shadow: none;
-				}
-				.animated-button:link:hover:after, .animated-button:visited:hover:after {
-					height: 450%;
-				}
 
 
 				/* Thar Buttons */
@@ -121,16 +114,6 @@ function mp_sermongrid_podcast_output() {
 					position: relative;
 					border: 3px solid #545454;
 					transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
-				}
-				.animated-button.thar-three:hover {
-					color: #FFFFFF !important;
-					background-color: #545454;
-					text-shadow: nthree;
-				}
-				.animated-button.thar-three:hover:before {
-					left: 0%;
-					right: auto;
-					width: 100%;
 				}
 				.animated-button.thar-three:before {
 					display: block;
@@ -256,10 +239,70 @@ function mp_sermongrid_podcast_other_output() {
 					margin-top:20px;
 				}
 
+				/* Global Button Styles */
+				.animated-button {
+					font-size: 18px;
+					position: relative;
+					display: block;
+					padding: 14px 15px;
+					color: #f9b429;
+					text-align: center;
+					text-decoration: none;
+					overflow: hidden;
+					letter-spacing: .08em;
+					border-radius: 0;
+					-webkit-transition: all 1s ease;
+					-moz-transition: all 1s ease;
+					-o-transition: all 1s ease;
+					transition: all 1s ease;
+				}
+
+
+				/* Thar Buttons */
+				.animated-button.thar-three {
+					color: #545454;
+					cursor: pointer;
+					display: inline-block;
+					position: relative;
+					border: 3px solid #545454;
+					transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+				}
+				.animated-button.thar-three:before {
+					display: block;
+					position: absolute;
+					top: 0px;
+					right: 0px;
+					height: 100%;
+					width: 0px;
+					z-index: -1;
+					content: '';
+					color: #FFFFFF !important;
+					background: #f9b429;
+					transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+				}
+
+
 			</style>
+
 		</head>
 
 		<body class="mp-sermongrid-podcast-page">
+			<script type="text/javascript">
+
+				function select_text() {
+
+					console.log( 'sesg' );
+					/* Get the text field */
+					var copyText = document.getElementById("mp-sermondgrid-podcast-copy-url-field");
+
+					/* Select the text field */
+					copyText.select();
+
+					/* Copy the text inside the text field */
+					document.execCommand("copy");
+
+				}
+			</script>
 			<div class="mp-sermongrid-podcast-page-container">
 				<h1><?php echo __( 'Subscribe using your app\'s instructions', 'mp_stacks_sermongrid' ); ?></h1>
 				<div class="mp-sermongrid-podcast-selection-container">
@@ -267,8 +310,9 @@ function mp_sermongrid_podcast_other_output() {
 						<?php echo __( 'Great! Your app will have instructions on how to subscribe to a podcast. Usually, it will ask you for a podcast URL. When it does, copy and paste this URL into the app to subscribe:', 'mp_stacks_sermongrid' ); ?>
 					</div>
 					<div class="mp-sermondgrid-podcast-selection-item other">
-						<input class="mp-sermondgrid-podcast-copy-url-field" type="text" disabled value="<?php echo get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/'; ?>"/>
+						<input id="mp-sermondgrid-podcast-copy-url-field" class="mp-sermondgrid-podcast-copy-url-field" type="text" readonly="true" value="<?php echo get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/'; ?>"/>
 					</div>
+					<button class="animated-button thar-three" onclick="select_text()"><?php echo __( 'Copy', 'mp_stacks_sermongrid' ); ?></button>
 				</div>
 			</div>
 		</body>
