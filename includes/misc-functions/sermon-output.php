@@ -731,7 +731,7 @@ function mp_stacks_sermongrid_post_output() {
 								// Get a feed url for the podcast.
 								$feed_url = mp_core_get_post_meta( $post_id, 'sermongrid_podcasting_feedburner_url', get_bloginfo( 'wpurl' ) . '?mp_stacks_sermongrid_podcast' );
 
-								$feed_url = apply_filters( 'mp_stacks_sermongrid_podcast_feed_url', $feed_url );
+								//$feed_url = apply_filters( 'mp_stacks_sermongrid_podcast_feed_url', $feed_url );
 
 								$show_podcast_url = apply_filters( 'mp_stacks_sermongrid_show_podcast', true );
 

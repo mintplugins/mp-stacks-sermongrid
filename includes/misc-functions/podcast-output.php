@@ -26,18 +26,32 @@ function mp_sermongrid_podcast_output() {
 		return;
 	}
 
+	$feed_url = get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/';
+
+	// If CTC is installed use it's feed for the podcast.
+	if ( class_exists( 'Church_Theme_Content' ) ) {
+		$feed_url = get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/';
+	}
+
+	// If WPFC is installed, use its feed.
+	if ( class_exists( 'SermonManager' ) ) {
+		$feed_url = get_bloginfo( 'wpurl' ) . '/wpfc-sermons/feed/';
+	}
+
+	$feed_url = apply_filters( 'mp_stacks_sermongrid_podcast_feed_url', $feed_url );
+
 	if ( ! is_ssl() ) {
-		$itunes_url = str_replace( 'http://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+		$itunes_url = str_replace( 'http://', 'itpc://', $feed_url );
 	} else {
-		$itunes_url = str_replace( 'https://', 'itpc://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+		$itunes_url = str_replace( 'https://', 'itpc://', $feed_url );
 	}
 
 	// If we are on iPhone
 	if ( mp_core_is_iphone() ) {
 		if ( ! is_ssl() ) {
-			$itunes_url = str_replace( 'http://', 'feed://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+			$itunes_url = str_replace( 'http://', 'feed://', $feed_url );
 		} else {
-			$itunes_url = str_replace( 'https://', 'feed://', get_bloginfo( 'wpurl' ) ) . '/ctc-sermons/feed/';
+			$itunes_url = str_replace( 'https://', 'feed://', $feed_url );
 		}
 	}
 
@@ -180,6 +194,20 @@ function mp_sermongrid_podcast_other_output() {
 		return;
 	}
 
+	$feed_url = get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/';
+
+	// If CTC is installed use it's feed for the podcast.
+	if ( class_exists( 'Church_Theme_Content' ) ) {
+		$feed_url = get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/';
+	}
+
+	// If WPFC is installed, use its feed.
+	if ( class_exists( 'SermonManager' ) ) {
+		$feed_url = get_bloginfo( 'wpurl' ) . '/wpfc-sermons/feed/';
+	}
+
+	$feed_url = apply_filters( 'mp_stacks_sermongrid_podcast_feed_url', $feed_url );
+
 	ob_get_clean();
 	ob_start();
 	?>
@@ -220,6 +248,9 @@ function mp_sermongrid_podcast_other_output() {
 					background-color:#FFFFFF;
 				}
 				.mp-sermondgrid-podcast-selection-item{
+					margin-bottom:20px;
+				}
+				.mp-sermondgrid-podcast-copy-url-field{
 					margin-bottom:20px;
 				}
 				.mp-sermondgrid-podcast-selection-item-img{
@@ -310,9 +341,9 @@ function mp_sermongrid_podcast_other_output() {
 						<?php echo __( 'Great! Your app will have instructions on how to subscribe to a podcast. Usually, it will ask you for a podcast URL. When it does, copy and paste this URL into the app to subscribe:', 'mp_stacks_sermongrid' ); ?>
 					</div>
 					<div class="mp-sermondgrid-podcast-selection-item other">
-						<input id="mp-sermondgrid-podcast-copy-url-field" class="mp-sermondgrid-podcast-copy-url-field" type="text" readonly="true" value="<?php echo get_bloginfo( 'wpurl' ) . '/ctc-sermons/feed/'; ?>"/>
+						<input id="mp-sermondgrid-podcast-copy-url-field" class="mp-sermondgrid-podcast-copy-url-field" type="text" readonly="true" value="<?php echo esc_url( $feed_url ); ?>"/>
+						<button class="animated-button thar-three" onclick="select_text()"><?php echo __( 'Copy', 'mp_stacks_sermongrid' ); ?></button>
 					</div>
-					<button class="animated-button thar-three" onclick="select_text()"><?php echo __( 'Copy', 'mp_stacks_sermongrid' ); ?></button>
 				</div>
 			</div>
 		</body>
