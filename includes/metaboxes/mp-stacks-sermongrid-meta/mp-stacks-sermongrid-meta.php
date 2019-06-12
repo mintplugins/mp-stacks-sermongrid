@@ -58,6 +58,14 @@ function mp_stacks_sermongrid_create_meta_box(){
 		$manage_sermons_link = admin_url( 'edit.php?post_type=ctc_sermon' );
 	}
 
+	// Add sermon series from WPFC
+	$wpfc_sermon_series = mp_core_get_all_terms_by_tax('wpfc_sermon_series');
+	//Loop through each sermon series
+	foreach( $wpfc_sermon_series as $term_id => $term_name ){
+		//Add the series to the list of source options for this grid
+		$sermon_categories[$term_id . '*wpfc_sermon_series'] = $term_name;
+	}
+
 	//Add "related" sermons
 	$sermon_categories['related_sermons'] = __('Show Related Sermons based on Tag (only use this if the stack is sitting on a "Sermon" post).');
 

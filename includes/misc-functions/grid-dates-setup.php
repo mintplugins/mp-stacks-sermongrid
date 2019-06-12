@@ -1,8 +1,8 @@
-<?php 
+<?php
 /**
- * This file contains the function which set up the Dates in the Grid. 
+ * This file contains the function which set up the Dates in the Grid.
  *
- * To use this for additional Text Overlays in a grid, duplicate this file 
+ * To use this for additional Text Overlays in a grid, duplicate this file
  * 1. Find and replace "sermongrid" with your plugin's prefix
  * 2. Find and replace "date" with your desired text overlay name
  * 3. Make custom changes to the mp_stacks_sermongrid_date function about what is displayed.
@@ -26,8 +26,8 @@
  * @param    $post_id Int - The ID of the Brick
  * @return   Array - All of the placement optons needed for Date
  */
-function mp_stacks_sermongrid_date_meta_options( $items_array ){		
-	
+function mp_stacks_sermongrid_date_meta_options( $items_array ){
+
 	//Date Settings
 	$new_fields = array(
 		//Date
@@ -79,7 +79,7 @@ function mp_stacks_sermongrid_date_meta_options( $items_array ){
 			'field_value' => '13',
 			'field_showhider' => 'sermongrid_date_settings',
 		),
-		
+
 		'sermongrid_date_google_font' => array(
 			'field_id'			=> 'sermongrid_date_google_font',
 			'field_title' 	=> __( 'Google Font Name', 'mp_stacks'),
@@ -94,20 +94,20 @@ function mp_stacks_sermongrid_date_meta_options( $items_array ){
 			'field_title' 	=> __( 'Font Weight/Style', 'mp_stacks'),
 			'field_description' 	=> 'Set the weight of this font (If available for your chosen font)',
 			'field_type' 	=> 'select',
-			'field_select_values' => array( 
-				'100' => 'Thin', 
-				'200' => 'Extra-Light', 
-				'300' => 'Light', 
-				'400' => 'Normal', 
-				'500' => 'Medium', 
-				'600' => 'Semi-Bold', 
+			'field_select_values' => array(
+				'100' => 'Thin',
+				'200' => 'Extra-Light',
+				'300' => 'Light',
+				'400' => 'Normal',
+				'500' => 'Medium',
+				'600' => 'Semi-Bold',
 				'700' => 'Bold',
-				'900' => 'Ultra-Bold', 
+				'900' => 'Ultra-Bold',
 			),
 			'field_value' => '',
 			'field_showhider' => 'sermongrid_date_settings',
 		),
-		
+
 		'sermongrid_date_spacing' => array(
 			'field_id'			=> 'sermongrid_date_spacing',
 			'field_title' 	=> __( 'Dates\' Spacing', 'mp_stacks_sermongrid'),
@@ -221,7 +221,7 @@ function mp_stacks_sermongrid_date_meta_options( $items_array ){
 		),
 
 	);
-	
+
 	return mp_core_insert_meta_fields( $items_array, $new_fields, 'sermongrid_meta_hook_anchor_2' );
 
 }
@@ -237,14 +237,14 @@ add_filter( 'mp_stacks_sermongrid_items_array', 'mp_stacks_sermongrid_date_meta_
  * @return   Array - All of the placement optons needed for Date
  */
 function mp_stacks_sermongrid_date_placement_options( $placement_options, $post_id ){
-	
+
 	//Show Post Dates
 	$placement_options['date_show'] = mp_core_get_post_meta($post_id, 'sermongrid_date_show');
 
 	//Dates Placement
 	$placement_options['date_placement'] = mp_core_get_post_meta($post_id, 'sermongrid_date_placement', 'over_image_top_left');
-	
-	return $placement_options;	
+
+	return $placement_options;
 }
 add_filter( 'mp_stacks_sermongrid_placement_options', 'mp_stacks_sermongrid_date_placement_options', 10, 2 );
 
@@ -257,15 +257,15 @@ add_filter( 'mp_stacks_sermongrid_placement_options', 'mp_stacks_sermongrid_date
  * @return   $html_output String - A string holding the html for an date in the grid
  */
 function mp_stacks_sermongrid_date( $post_id ){
-	
-	$the_date = get_the_date( get_option( 'date_format' ), $post_id );
 
-	$sermongrid_output = mp_stacks_grid_highlight_text_html( array( 
+	$the_date = get_the_time( get_option( 'date_format' ), $post_id );
+
+	$sermongrid_output = mp_stacks_grid_highlight_text_html( array(
 		'class_name' => 'mp-stacks-sermongrid-item-date',
-		'output_string' => $the_date, 
+		'output_string' => $the_date,
 	) );
-	
-	return $sermongrid_output;	
+
+	return $sermongrid_output;
 
 }
 
@@ -278,16 +278,16 @@ function mp_stacks_sermongrid_date( $post_id ){
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_date_top_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the date over the image
 	if ( strpos( $options['date_placement'], 'over') !== false && strpos( $options['date_placement'], 'top') !== false && $options['date_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_date( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_top_over', 'mp_stacks_sermongrid_date_top_over_callback', 14, 3 );
 
@@ -300,14 +300,14 @@ add_filter( 'mp_stacks_sermongrid_top_over', 'mp_stacks_sermongrid_date_top_over
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_date_middle_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the date over the image
 	if ( strpos( $options['date_placement'], 'over') !== false && strpos( $options['date_placement'], 'middle') !== false && $options['date_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_date( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
 }
 add_filter( 'mp_stacks_sermongrid_middle_over', 'mp_stacks_sermongrid_date_middle_over_callback', 14, 3 );
@@ -321,16 +321,16 @@ add_filter( 'mp_stacks_sermongrid_middle_over', 'mp_stacks_sermongrid_date_middl
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_date_bottom_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the date over the image
 	if ( strpos( $options['date_placement'], 'over') !== false && strpos( $options['date_placement'], 'bottom') !== false && $options['date_show']){
-		
+
 		return $sermongrid_output . mp_stacks_sermongrid_date( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_bottom_over', 'mp_stacks_sermongrid_date_bottom_over_callback', 14, 3 );
 
@@ -343,25 +343,25 @@ add_filter( 'mp_stacks_sermongrid_bottom_over', 'mp_stacks_sermongrid_date_botto
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
 function mp_stacks_sermongrid_date_below_over_callback( $sermongrid_output, $grid_post_id, $options ){
-	
+
 	//If we should show the date below the image
 	if ( strpos( $options['date_placement'], 'below') !== false && $options['date_show']){
-		
+
 		$link = get_permalink();
-		$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );	
+		$lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), $link );
 		$non_lightbox_link = $link;
 		$lightbox_class = 'mp-stacks-iframe-height-match-lightbox-link';
 		$target = 'mfp-width="1290px"';
-							
+
 		$date_html_output = '<a mp_lightbox_alternate_url="' . $lightbox_link . '" href="' . $non_lightbox_link . '" ' . $target . ' class="mp-stacks-sermongrid-date-link ' . $lightbox_class . '" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
 			$date_html_output .= mp_stacks_sermongrid_date( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 		$date_html_output .= '</a>';
-		
+
 		return $sermongrid_output . $date_html_output;
 	}
-	
+
 	return $sermongrid_output;
-	
+
 }
 add_filter( 'mp_stacks_sermongrid_below', 'mp_stacks_sermongrid_date_below_over_callback', 14, 3 );
 
@@ -376,18 +376,18 @@ add_filter( 'mp_stacks_sermongrid_below', 'mp_stacks_sermongrid_date_below_over_
  * @return   $new_grid_output - the existing grid output with additional thigns added by this function.
  */
 function mp_stacks_sermongrid_date_animation_js( $existing_filter_output, $post_id, $meta_prefix ){
-	
+
 	if ( $meta_prefix != 'sermongrid' ){
-		return $existing_filter_output;	
+		return $existing_filter_output;
 	}
-	
+
 	//Get JS output to animate the dates on mouse over and out
-	$date_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-date-holder', mp_core_get_post_meta( $post_id, 'sermongrid_date_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id ); 
-	
+	$date_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-sermongrid-item-date-holder', mp_core_get_post_meta( $post_id, 'sermongrid_date_animation_keyframes', array() ), true, true, 'mp-brick-' . $post_id );
+
 	return $existing_filter_output .= $date_animation_js;
 }
 add_filter( 'mp_stacks_grid_js', 'mp_stacks_sermongrid_date_animation_js', 10, 3 );
-		
+
 /**
  * Add the CSS for the date to SermonGrid's CSS
  *
@@ -397,7 +397,7 @@ add_filter( 'mp_stacks_grid_js', 'mp_stacks_sermongrid_date_animation_js', 10, 3
  * @return   $css_output String - The incoming CSS with our new CSS for the date appended.
  */
 function mp_stacks_sermongrid_date_css( $css_output, $post_id ){
-	
+
 	$date_css_defaults = array(
 		'color' => '#000',
 		'size' => 13,
@@ -423,35 +423,35 @@ add_filter('mp_stacks_sermongrid_css', 'mp_stacks_sermongrid_date_css', 10, 2);
  * @return   $css_output          String - A string holding the css the brick
  */
 function mp_stacks_sermongrid_date_google_font( $css_output, $post_id, $first_content_type, $second_content_type ){
-	
+
 	if ( $first_content_type != 'sermongrid' && $second_content_type != 'sermongrid' ){
-		return $css_output;	
+		return $css_output;
 	}
-	
+
 	global $mp_stacks_footer_inline_css, $mp_core_font_families;
-	
+
 	//Default settings for the MP Core Google Font Class
 	$mp_core_google_font_args = array( 'echo_google_font_css' => false, 'wrap_in_style_tags' => false );
-	
+
 	$sermongrid_date_googlefont = mp_core_get_post_meta( $post_id, 'sermongrid_date_google_font' );
 	$sermongrid_date_googlefontweight = mp_core_get_post_meta( $post_id, 'sermongrid_date_google_font_weight_style' );
-	
+
 	//If a font name has been entered
 	if ( !empty( $sermongrid_date_googlefont ) ){
-		
+
 		//Check if a font extra (weight) has been selected and add it if so.
 		$sermongrid_date_googlefontweight = isset($sermongrid_date_googlefontweight) && !empty( $sermongrid_date_googlefontweight ) ? ':' . $sermongrid_date_googlefontweight : NULL;
 		$sermongrid_date_googlefont = $sermongrid_date_googlefont . $sermongrid_date_googlefontweight;
-	
+
 		//Load the Google Font using the Google Font Class in MP Core
 		new MP_CORE_Font( $sermongrid_date_googlefont, $sermongrid_date_googlefont, $mp_core_google_font_args );
 		$mp_stacks_footer_inline_css[$sermongrid_date_googlefont] = $mp_core_font_families[$sermongrid_date_googlefont];
-		
+
 		//Return the incoming css string plus css to apply this font family to all paragraph tags
 		$css_output .=  '#mp-brick-' . $post_id . ' .mp-stacks-sermongrid-item-date, #mp-brick-' . $post_id . ' .mp-stacks-sermongrid-item-date * { font-family: \'' . $sermongrid_date_googlefont . '\';}';
-	
+
 	}
-	
-	return $css_output;	
+
+	return $css_output;
 }
-add_filter('mp_brick_additional_css', 'mp_stacks_sermongrid_date_google_font', 10, 4);	
+add_filter('mp_brick_additional_css', 'mp_stacks_sermongrid_date_google_font', 10, 4);

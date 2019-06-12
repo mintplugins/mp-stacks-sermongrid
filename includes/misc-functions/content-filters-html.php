@@ -115,7 +115,7 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 		'paged' => 0,
 		'post_status' => 'publish',
 		'posts_per_page' => $sermongrid_per_page,
-		'post_type' => 'ctc_sermon',
+		'post_type' => array( 'ctc_sermon', 'wpfc_sermon' ),
 		'post__not_in' => array($queried_object_id),
 		'tax_query' => array(
 			'relation' => 'OR',
@@ -126,6 +126,10 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 
 	//Set the order by options for the wp query
 	switch ( $orderby ) {
+		case 'date':
+			$sermongrid_args['orderby'] = 'date';
+			$sermongrid_args['order'] = 'DESC';
+			break;
 		case 'date_newest_to_oldest':
 			$sermongrid_args['orderby'] = 'date';
 			$sermongrid_args['order'] = 'DESC';
@@ -208,22 +212,22 @@ function mp_stacks_sermongrid_output( $post_id, $loading_more = false, $post_off
 				//If we should show related downloads
 				if ( $sermongrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
 
-					$tags = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag' );
-
-					if ( is_object( $tags ) ){
-						$tags_array = $tags;
-					}
-					elseif (is_array( $tags ) ){
-						$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
-					}
-
-					$tag_slugs = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag', array("fields" => "slugs") );
+					$ctc_tags = wp_get_post_terms( $queried_object_id, 'ctc_sermon_tag', array("fields" => "slugs") );
 
 					//Add the related tags as a tax_query to the WP_Query
 					$sermongrid_args['tax_query'][] = array(
 						'taxonomy' => 'ctc_sermon_tag',
 						'field'    => 'slug',
-						'terms'    => $tag_slugs,
+						'terms'    => $ctc_tags,
+					);
+
+					$wpfc_tags = wp_get_post_terms( $queried_object_id, 'wpfc_sermon_series', array("fields" => "slugs") );
+
+					//Add the related tags as a tax_query to the WP_Query
+					$sermongrid_args['tax_query'][] = array(
+						'taxonomy' => 'wpfc_sermon_series',
+						'field'    => 'slug',
+						'terms'    => $wpfc_tags,
 					);
 
 				}

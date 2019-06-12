@@ -17,12 +17,12 @@
  *
  * @since 1.6
  *
- * @param content String containing the post content
- * @return void
+ * @param  string $content String containing the post content.
+ * @return string
  */
-function mp_sermongrid_sermon_button($content) {
+function mp_sermongrid_sermon_button( $content ) {
 
-	//Set up post variables
+	// Set up post variables.
 	$post_id = get_the_ID();
 
 	$link = get_permalink();
@@ -31,7 +31,7 @@ function mp_sermongrid_sermon_button($content) {
 
 	$button_html = '<a href="' . $iframe_url . '" class="button mp-stacks-iframe-height-match-lightbox-link">' . __( 'Launch Sermon Player', 'mp_stacks_sermongrid' ) . '</a>';
 
-  return $button_html . $content;
+	return $button_html . $content;
 }
 
 /**
@@ -39,52 +39,55 @@ function mp_sermongrid_sermon_button($content) {
  *
  * @since 1.6
  *
- * @param void
  * @return void
  */
-function mp_stacks_sermongrid_post_output(){
+function mp_stacks_sermongrid_post_output() {
 
 	global $wp_query;
 
-	//If we are not supposed to show an mp_sermongrid_post, get out of here
-	if( !isset( $wp_query->query['post_type'] ) || ( isset( $wp_query->query['post_type'] ) && $wp_query->query['post_type'] != 'ctc_sermon' ) || is_admin() ){
+	// If we are not supposed to show an mp_sermongrid_post, get out of here.
+	if (
+		! isset( $wp_query->query['post_type'] ) ||
+		( isset( $wp_query->query['post_type'] ) && 'ctc_sermon' !== $wp_query->query['post_type'] && 'wpfc_sermon' !== $wp_query->query['post_type'] ) ||
+		is_admin()
+	) {
 		return;
 	}
 
-	//If this post is NOT loading in a lightbox/iframe, get out of here. This style is for lightboxes/iframes only.
-	if ( !isset( $_GET['mp_sermongrid_lightbox'] ) && !isset( $_GET['mp_sermongrid_iframe'] ) ){
+	// If this post is NOT loading in a lightbox/iframe, get out of here. This style is for lightboxes/iframes only.
+	if ( ! isset( $_GET['mp_sermongrid_lightbox'] ) && ! isset( $_GET['mp_sermongrid_iframe'] ) ) {
 
 		add_filter( 'the_content', 'mp_sermongrid_sermon_button' );
 
 		return;
 	}
 
-
-	//Set up post variables
-	$post_id = get_the_ID();
+	// Set up post variables.
+	$post_id   = get_the_ID();
+	$post_type = get_post_type( $post_id );
 
 	?>
-    <!DOCTYPE html>
-    <html <?php language_attributes(); ?>>
-        <head>
-            <meta charset="<?php bloginfo( 'charset' ); ?>" />
-            <meta name=viewport content="width=device-width, initial-scale=1">
-            <title><?php wp_title( '|', true, 'right' ); ?></title>
-            <link rel="profile" href="//gmpg.org/xfn/11" />
-            <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
+	<!DOCTYPE html>
+	<html <?php language_attributes(); ?>>
+		<head>
+			<meta charset="<?php bloginfo( 'charset' ); ?>" />
+			<meta name=viewport content="width=device-width, initial-scale=1">
+			<title><?php wp_title( '|', true, 'right' ); ?></title>
+			<link rel="profile" href="//gmpg.org/xfn/11" />
+			<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 
-            <!-- Google Fonts -->
-            <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-            <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+			<!-- Google Fonts -->
+			<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+			<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
 
 			<!-- Jquery From WordPress -->
 			<script type='text/javascript' src='<?php bloginfo( 'wpurl' ); ?>/wp-includes/js/jquery/jquery.js'></script>
 
-            <!--[if lt IE 9]>
-            <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
-            <![endif]-->
+			<!--[if lt IE 9]>
+			<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
+			<![endif]-->
 
-            <style type="text/css">
+			<style type="text/css">
 
 				body{
 					font-size: 1.2rem;
@@ -493,213 +496,231 @@ function mp_stacks_sermongrid_post_output(){
 
 			</style>
 
-             <script>
+			<script>
 				function mp_core_go_back() {
 					window.history.back();
 				}
 			</script>
 
-        </head>
+		</head>
 
-        <body>
+		<body>
 
-            <div id="mp-core-mobile-back-btn-container" style="background-color:#25272a; color:#fff; width=100%; font-size:45px;">
-                <div id="mp-core-back-btn-icon" onclick="mp_core_go_back()" style="padding:20px 10px 30px 20px; line-height: 1px;">&lsaquo;</div>
-            </div>
+			<div id="mp-core-mobile-back-btn-container" style="background-color:#25272a; color:#fff; width=100%; font-size:45px;">
+				<div id="mp-core-back-btn-icon" onclick="mp_core_go_back()" style="padding:20px 10px 30px 20px; line-height: 1px;">&lsaquo;</div>
+			</div>
 
-            <div class="outer-container">
+			<div class="outer-container">
 
-                <div id="login-box">
-                	<div id="login-box-close"><?php echo __( 'Close', 'mp_stacks_sermongrid' ); ?></div>
-                	<div id="login-box-inner-table">
-                    	<div id="login-box-inner-table-cell">
-                            <div id="login-box-header">
+				<div id="login-box">
+					<div id="login-box-close"><?php echo __( 'Close', 'mp_stacks_sermongrid' ); ?></div>
+					<div id="login-box-inner-table">
+						<div id="login-box-inner-table-cell">
+							<div id="login-box-header">
 
-                                <div id="login-box-header-message">
+								<div id="login-box-header-message">
 
-                                </div>
+								</div>
 
-                                <div id="login-box-header-comment">
+								<div id="login-box-header-comment">
 
-                                </div>
+								</div>
 
-                            </div>
+							</div>
 
-                            <div id="login-box-left-side">
+							<div id="login-box-left-side">
 
-                                <div id="log-in-using-email-title">
-                                	<?php echo __( 'Log In using Email', 'mp_stacks_sermongrid' ); ?>
-                                </div>
+								<div id="log-in-using-email-title">
+									<?php echo __( 'Log In using Email', 'mp_stacks_sermongrid' ); ?>
+								</div>
 
-                                <div id="wp-signin-container">
-                                	<?php echo mp_stacks_sermongrid_wp_login_form(); ?>
-                            	</div>
+								<div id="wp-signin-container">
+									<?php echo mp_stacks_sermongrid_wp_login_form(); ?>
+								</div>
 
-                            </div>
+							</div>
 
-                            <div id="login-box-right-side">
+							<div id="login-box-right-side">
 
-                                <div id="log-in-services">
+								<div id="log-in-services">
 
-                                    <ul id="log-in-services-list">
+									<ul id="log-in-services-list">
 
-                                    </ul>
+									</ul>
 
-                                </div>
+								</div>
 
-                            </div>
-                    	</div>
-                    </div>
-                </div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                <?php
+				<?php
 
-				//Get the popup Media Content URLs
-                $video_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_video' );
-				$audio_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_audio' );
+				// Get the popup Media Content URLs.
+				if ( 'ctc_sermon' === $post_type ) {
+					$video_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_video' );
+					$audio_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_audio' );
+				}
+
+				if ( 'wpfc_sermon' === $post_type ) {
+					$video_value = mp_core_get_post_meta( $post_id, 'sermon_video' );
+					$video_value = empty( $video_value ) ? mp_core_get_post_meta( $post_id, 'sermon_video_link' ) : false;
+					$audio_value = mp_core_get_post_meta( $post_id, 'sermon_audio' );
+				}
 
 				$audio_only = false;
 
-				//If a video has been entered
-				if ( !empty( $video_value ) ){
+				// If a video has been entered.
+				if ( ! empty( $video_value ) ) {
 
-					if( strpos( $video_value, 'iframe' ) ) {
+					if ( strpos( $video_value, 'iframe' ) ) {
 						//Let it be.
 					}
 					//If the video is a youtube video, add custom formatting to the URL
-					elseif (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $video_value, $match)) {
+					elseif ( preg_match( '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $video_value, $match ) ) {
 						$youtube_video_id = $match[1];
-						$video_value = 'https://www.youtube.com/embed/' . $youtube_video_id . '?modestbranding=1&showinfo=0&rel=0&wmode=transparent&autohide=1&autoplay=1&fs=1';
+						$video_value      = 'https://www.youtube.com/embed/' . $youtube_video_id . '?modestbranding=1&showinfo=0&rel=0&wmode=transparent&autohide=1&autoplay=1&fs=1';
 					}
 					//If this is a vimeo video
 					elseif ( strpos( $video_value, 'vimeo' ) ) {
 						//Get json from vimeo about this video using Curl
-						$curl = curl_init('http://vimeo.com/api/oembed.json?url=' . $video_value );
-						curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-						curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-						curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-						$vimeo_info_array = curl_exec($curl);
-						curl_close($curl);
+						$curl = curl_init( 'http://vimeo.com/api/oembed.json?url=' . $video_value );
+						curl_setopt( $curl, CURLOPT_RETURNTRANSFER, 1 );
+						curl_setopt( $curl, CURLOPT_TIMEOUT, 30 );
+						curl_setopt( $curl, CURLOPT_FOLLOWLOCATION, 1 );
+						$vimeo_info_array = curl_exec( $curl );
+						curl_close( $curl );
 
-						//Json decode Vimeo info array
-						$vimeo_info_array = json_decode($vimeo_info_array, true);
+						// Json decode Vimeo info array.
+						$vimeo_info_array = json_decode( $vimeo_info_array, true );
 
 						$video_id = $vimeo_info_array['video_id'];
 
-						//Create iframe with settings for vimeo
+						// Create iframe with settings for vimeo.
 						$video_value = '//player.vimeo.com/video/' . $video_id . '?portrait=0&badge=0&color=ff9933&autoplay=1';
 					}
 
 					$content_url = $video_value;
 
-				}
-				//If only audio has been entered without a video
-				elseif( !empty( $audio_value ) ){
+					// If only audio has been entered without a video.
+				} elseif ( ! empty( $audio_value ) ) {
 					$content_url = $audio_value;
-					$audio_only = true;
+					$audio_only  = true;
+				} else {
+					$content_url = null;
 				}
-				else{
-					$content_url = NULL;
-				}
 
-				if ( !empty( $content_url ) ){
+				if ( ! empty( $content_url ) ) {
 
-					?><div id="left-side"><?php
+					?>
+					<div id="left-side">
+					<?php
 
-					//Attempt to wrap the content in an HTML tag
+					// Attempt to wrap the content in an HTML tag.
 					$args = array(
-						'autoplay_videos' => true
+						'autoplay_videos' => true,
 					);
 
 					// If we are on an iPhone, it handled HTML5 player strangely, so output a link only.
-					if( mp_core_is_iphone() && $audio_only ){
+					if ( mp_core_is_iphone() && $audio_only ) {
 						$content_html = '<a style="width:100%; height:250px; text-align:center; font-size:180px; color:#545454;" href="' . $content_url . '">&#9658;</a>';
-					}else{
+					} else {
 						$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
 					}
 
-					//If we were able to wrap the content, show it
-					if ( trim( $content_html ) != trim( $content_url ) ){
+					// If we were able to wrap the content, show it.
+					if ( trim( $content_html ) !== trim( $content_url ) ) {
 
 						echo $content_html;
 
 						$media_to_show = true;
 
-					}else{
+					} else {
 						$media_to_show = false;
-					}?>
+					}
+					?>
 
 					</div>
-                <?php } ?>
-                <div id="right-side">
+				<?php } ?>
+				<div id="right-side">
 
-                	<?php
+					<?php
 
-						//Get the title and description of this post
+						// Get the title and description of this post.
 						$post_title = get_the_title( $post_id );
 
-						$post_object = get_post( $post_id );
+						$post_object      = get_post( $post_id );
 						$post_description = $post_object->post_content;
 
 					?>
 
 
-                    <div id="title-block" class="white-block">
+					<div id="title-block" class="white-block">
 
-                        <input id="post-id" type="hidden" value="<?php echo $post_id; ?>" />
+						<input id="post-id" type="hidden" value="<?php echo esc_attr( $post_id ); ?>" />
 
 						<?php
 
-						if ( current_user_can( 'edit_posts' ) ){?>
-                        	<div id="edit-post"><a href="<?php echo get_edit_post_link( $post_id ); ?>" target="_blank"><?php echo __( 'Edit this WP Post', 'mp_stacks_sermongrid' ); ?></a></div><?php
+						if ( current_user_can( 'edit_posts' ) ) {
+							?>
+							<div id="edit-post"><a href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>" target="_blank"><?php echo esc_textarea( __( 'Edit this WP Post', 'mp_stacks_sermongrid' ) ); ?></a></div>
+																	<?php
 						}
 
 						?>
 
-                        <div id="featured-image">
-                        	<img src="<?php echo mp_core_the_featured_image( $post_id, 150 ); ?>" width="75px" />
-                        </div>
+						<div id="featured-image">
+							<img src="<?php echo esc_url( mp_core_the_featured_image( $post_id, 150 ) ); ?>" width="75px" />
+						</div>
 
-                        <div id="title-date">
-                            <div>
-                                <time class="timestamp" datetime="<?php echo get_the_time( 'c' ); ?>">
-                                    <span class="date"><?php echo get_the_time( 'M d, Y' ); ?></span>
-                                </time>
-                            </div>
+						<div id="title-date">
+							<div>
+								<time class="timestamp" datetime="<?php echo esc_textarea( get_the_time( 'c' ) ); ?>">
+									<span class="date"><?php echo esc_textarea( get_the_time( 'M d, Y' ) ); ?></span>
+								</time>
+							</div>
 
-                            <span>
-                                <h1 class="text"><?php echo $post_title; ?></h1>
-                            </span>
+							<span>
+								<h1 class="text"><?php echo esc_textarea( $post_title ); ?></h1>
+							</span>
 
-                        </div>
+						</div>
 
-                        <div id="downloads">
+						<div id="downloads">
 
-                             	<?php
+								<?php
 
-								if ( ! empty( $audio_value ) ){ ?>
+								if ( ! empty( $audio_value ) ) {
+									?>
 
-                                    <a href="<?php echo $audio_value; ?>" class="download-item mp3-button" target="_blank">
-                                        <div class="download-item-container">
-                                            <div class="download-icon"><img src="<?php echo MP_STACKS_SERMONGRID_PLUGIN_URL; ?>/includes/svg/download.svg" width="15px" style="float:left;"/></div>
-                                            <div class="download-text">MP3</div>
-                                        </div>
-                                    </a>
+									<a href="<?php echo esc_url( $audio_value ); ?>" class="download-item mp3-button" target="_blank">
+										<div class="download-item-container">
+											<div class="download-icon"><img src="<?php echo esc_url( MP_STACKS_SERMONGRID_PLUGIN_URL ); ?>/includes/svg/download.svg" width="15px" style="float:left;"/></div>
+											<div class="download-text">MP3</div>
+										</div>
+									</a>
 
-                                    <?php
+									<?php
 
 								}
 
-								//Get the PDF download URL
-								$pdf_url = mp_core_get_post_meta( $post_id, '_ctc_sermon_pdf' );
+								// Get the PDF download URL.
+								if ( 'ctc_sermon' === $post_type ) {
+									$pdf_url = mp_core_get_post_meta( $post_id, '_ctc_sermon_pdf' );
+								}
 
-								//If a PDF has been entered
-								if ( !empty( $pdf_url ) ){
+								if ( 'wpfc_sermon' === $post_type ) {
+									$pdf_url = mp_core_get_post_meta( $post_id, 'sermon_notes' );
+								}
+
+								// If a PDF has been entered.
+								if ( ! empty( $pdf_url ) ) {
 									?>
 
-									 <a href="<?php echo $pdf_url; ?>" class="download-item pdf-button" target="_blank">
+									<a href="<?php echo esc_url( $pdf_url ); ?>" class="download-item pdf-button" target="_blank">
 										<div class="download-item-container">
-											<div class="download-icon"><img src="<?php echo MP_STACKS_SERMONGRID_PLUGIN_URL; ?>/includes/svg/download.svg" width="15px" style="float:left;"/></div>
+											<div class="download-icon"><img src="<?php echo esc_url( MP_STACKS_SERMONGRID_PLUGIN_URL ); ?>/includes/svg/download.svg" width="15px" style="float:left;"/></div>
 											<div class="download-text">PDF</div>
 										</div>
 									</a>
@@ -707,151 +728,167 @@ function mp_stacks_sermongrid_post_output(){
 
 								}
 
-								//Get a feed url for the podcast
+								// Get a feed url for the podcast.
 								$feed_url = mp_core_get_post_meta( $post_id, 'sermongrid_podcasting_feedburner_url', get_bloginfo( 'wpurl' ) . '?mp_stacks_sermongrid_podcast' );
 
 								$feed_url = apply_filters( 'mp_stacks_sermongrid_podcast_feed_url', $feed_url );
 
-                                $show_podcast_url = apply_filters( 'mp_stacks_sermongrid_show_podcast', true );
+								$show_podcast_url = apply_filters( 'mp_stacks_sermongrid_show_podcast', true );
 
-								//If this sermon has an uploaded mp3 file which will work in iTunes
-								if ( strpos( $audio_value, '.mp3' ) !== false && $show_podcast_url){ ?>
+								// If this sermon has an uploaded mp3 file which will work in iTunes.
+								if ( strpos( $audio_value, '.mp3' ) !== false && $show_podcast_url ) {
+									?>
 
-                                    <a href="<?php echo $feed_url; ?>" class="download-item podcast-button" target="_blank">
-                                        <div class="download-item-container">
-                                            <div class="download-icon"><img src="<?php echo MP_STACKS_SERMONGRID_PLUGIN_URL; ?>/includes/svg/iphone.svg" width="10px" style="float:left;"/></div>
-                                            <div class="download-text"><?php echo __( 'SUBSCRIBE on iTunes(Podcast)', 'mp_stacks_sermongrid' ); ?></div>
-                                        </div>
-                                    </a>
+									<a href="<?php echo esc_url( $feed_url ); ?>" class="download-item podcast-button" target="_blank">
+										<div class="download-item-container">
+											<div class="download-icon"><img src="<?php echo esc_url( MP_STACKS_SERMONGRID_PLUGIN_URL ); ?>/includes/svg/iphone.svg" width="10px" style="float:left;"/></div>
+											<div class="download-text"><?php echo esc_textarea( __( 'SUBSCRIBE on iTunes(Podcast)', 'mp_stacks_sermongrid' ) ); ?></div>
+										</div>
+									</a>
 
-                                <?php } ?>
-                            </div>
+								<?php } ?>
+							</div>
 
-                    </div>
+					</div>
 
-                    <div id="links-block">
+					<div id="links-block">
 
-                        <div id="view-description" class="links-block-item selected">
-                             <?php echo __( 'Notes', 'mp_stacks_sermongrid' ); ?>
-                        </div>
+						<div id="view-description" class="links-block-item selected">
+							<?php echo esc_textarea( __( 'Notes', 'mp_stacks_sermongrid' ) ); ?>
+						</div>
 
-                        <?php
-						//Check if comments are enabled for this event post.
-						if ( comments_open() ){ ?>
-                            <div id="view-comments" class="links-block-item">
-                                 <?php echo __( 'Discussion', 'mp_stacks_sermongrid' ); ?>
-                            </div>
- 						<?php }
+						<?php
+						// Check if comments are enabled for this event post.
+						if ( comments_open() ) {
+							?>
+							<div id="view-comments" class="links-block-item">
+								<?php echo esc_textarea( __( 'Discussion', 'mp_stacks_sermongrid' ) ); ?>
+							</div>
+							<?php
+						}
 
-                            //Get the series this sermon is a part of
-                            $sermon_series = get_the_terms( $post_id, 'ctc_sermon_series' );
+						// Get the series this sermon is a part of.
+						if ( 'ctc_sermon' === $post_type ) {
+							$sermon_series = get_the_terms( $post_id, 'ctc_sermon_series' );
+						}
 
-                            //If this sermon is part of a series
-                            if ( is_array( $sermon_series ) ){?>
+						if ( 'wpfc_sermon' === $post_type ) {
+							$sermon_series = get_the_terms( $post_id, 'wpfc_sermon_series' );
+						}
 
-                                <div id="view-series" class="links-block-item">
-                                     <a id="view-permalink-btn" target="_blank">
-                                        <?php echo __( 'Other Sermons in this Series', 'mp_stacks_sermongrid' ); ?>
-                                     </a>
-                                </div>
+							// If this sermon is part of a series.
+						if ( is_array( $sermon_series ) ) {
+							?>
 
-                            <?php } ?>
+								<div id="view-series" class="links-block-item">
+									<a id="view-permalink-btn" target="_blank">
+										<?php echo esc_textarea( __( 'Sermons in this Series', 'mp_stacks_sermongrid' ) ); ?>
+									</a>
+								</div>
 
-                    </div>
+							<?php } ?>
 
-                    <div class="content-block description selected">
+					</div>
 
-                        <div id="description-container"><?php echo do_shortcode( $post_description ); ?></div>
+					<div class="content-block description selected">
 
-                    </div>
+						<div id="description-container"><?php echo wp_kses_post( do_shortcode( $post_description ) ); ?></div>
 
-                    <?php
-					//Check if comments are enabled for this event post.
-					if ( comments_open() ){ ?>
+					</div>
 
-                        <div class="content-block comments">
+					<?php
+					// Check if comments are enabled for this sermon post.
+					if ( comments_open() ) {
+						?>
 
-                            <div id="comments-container">
-                                <?php echo __( 'Loading Discusson...', 'mp_stacks_sermongrid' ); ?>
-                           </div>
+						<div class="content-block comments">
 
-                           <div id="comment-form-container">
-                               <form action="<?php bloginfo( 'wpurl' ); ?>/wp-comments-post.php" method="post" id="commentform" class="comment-form">
-                                   <input type="text" id="comment" name="comment" placeholder="<?php echo __( 'Leave a comment...', 'mp_stacks_sermongrid' ); ?>" aria-required="true"></textarea>
-                                   <input name="submit" type="submit" id="submit" value="Post">
-                                   <input type="hidden" name="comment_post_ID" value="<?php echo $post_id; ?>" id="comment_post_ID">
-                                   <input type="hidden" name="comment_parent" id="comment_parent" value="0">
-                               </form>
-                           </div>
+							<div id="comments-container">
+								<?php echo __( 'Loading Discusson...', 'mp_stacks_sermongrid' ); ?>
+						   </div>
 
-                        </div>
-                    <?php } ?>
+						   <div id="comment-form-container">
+							   <form action="<?php bloginfo( 'wpurl' ); ?>/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+								   <input type="text" id="comment" name="comment" placeholder="<?php echo __( 'Leave a comment...', 'mp_stacks_sermongrid' ); ?>" aria-required="true"></textarea>
+								   <input name="submit" type="submit" id="submit" value="Post">
+								   <input type="hidden" name="comment_post_ID" value="<?php echo $post_id; ?>" id="comment_post_ID">
+								   <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+							   </form>
+						   </div>
 
-                    <div class="content-block series">
+						</div>
+					<?php } ?>
 
-                        <div id="series-container">
+					<div class="content-block series">
 
-                            <?php
-                            //If this sermon is part of a series
-                            if ( is_array( $sermon_series ) ){
+						<div id="series-container">
 
-                                //Get other sermons in this series
-                                foreach( $sermon_series as $single_series ){
-                                    $term_id = $single_series->term_id;
-                                    break;
-                                }
+							<?php
+							// If this sermon is part of a series...
+							if ( is_array( $sermon_series ) ) {
 
-                                //Set the args for the new query
-                                $sermon_series_args = array(
-                                    'post_type' => "ctc_sermon",
-                                    'posts_per_page' => -1,
-									'order' => 'asc',
-                                    'tax_query' => array(
-                                        'relation' => 'AND',
-                                        array(
-                                            'taxonomy' => 'ctc_sermon_series',
-                                            'field'    => 'id',
-                                            'terms'    => array( $term_id ),
-                                            'operator' => 'IN'
-                                        )
-                                    )
-                                );
+								//Get other sermons in this series
+								foreach ( $sermon_series as $single_series ) {
+									$term_id = $single_series->term_id;
+									break;
+								}
 
-                                //Create new query
-                                $ctc_sermon_series_query = new WP_Query( apply_filters( 'sermon_series_args', $sermon_series_args ) );
+								//Set the args for the new query
+								$sermon_series_args = array(
+									'posts_per_page' => -1,
+									'order'          => 'desc',
+									'tax_query'      => array(
+										'relation' => 'OR',
+										array(
+											'taxonomy' => 'ctc_sermon_series',
+											'field'    => 'id',
+											'terms'    => array( $term_id ),
+											'operator' => 'IN',
+										),
+										array(
+											'taxonomy' => 'wpfc_sermon_series',
+											'field'    => 'id',
+											'terms'    => array( $term_id ),
+											'operator' => 'IN',
+										),
+									),
+								);
 
-                                //Loop through the stack group
-                                if ( $ctc_sermon_series_query->have_posts() ) {
+								//Create new query
+								$ctc_sermon_series_query = new WP_Query( apply_filters( 'sermon_series_args', $sermon_series_args ) );
 
-                                    while( $ctc_sermon_series_query->have_posts() ) : $ctc_sermon_series_query->the_post();
+								//Loop through the stack group
+								if ( $ctc_sermon_series_query->have_posts() ) {
 
-                                        $sermon_id = get_the_ID();
+									while ( $ctc_sermon_series_query->have_posts() ) :
+										$ctc_sermon_series_query->the_post();
 
-                                        $featured_image = mp_core_the_featured_image( $sermon_id, 300 );
+										$sermon_id = get_the_ID();
 
-                                        echo '<a href="' . $lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), get_the_permalink( $sermon_id ) ) . '" class="sermon">';
-                                            echo '<div class="sermon-featured-img">';
-                                                echo '<img src="' . $featured_image . '" width="100%" />';
-                                            echo '</div>';
-                                            echo '<div class="sermon-title">';
-                                                echo get_the_title();
-                                            echo '</div>';
-                                        echo '</a>';
+										$featured_image = mp_core_the_featured_image( $sermon_id, 300 );
 
-                                    endwhile;
-                                }
+										echo '<a href="' . $lightbox_link = mp_core_add_query_arg( array( 'mp_sermongrid_lightbox' => true ), get_the_permalink( $sermon_id ) ) . '" class="sermon">';
+											echo '<div class="sermon-featured-img">';
+												echo '<img src="' . $featured_image . '" width="100%" />';
+											echo '</div>';
+											echo '<div class="sermon-title">';
+												echo get_the_title();
+											echo '</div>';
+										echo '</a>';
 
-                            }
+									endwhile;
+								}
+							}
 
-                            ?>
+							?>
 
-                        </div>
+						</div>
 
-                    </div>
+					</div>
 
-                </div>
+				</div>
 
-                <script type="text/javascript">
+				<script type="text/javascript">
 
 					jQuery(document).ready(function($){
 
@@ -1178,9 +1215,9 @@ function mp_stacks_sermongrid_post_output(){
 					}
 
 				</script>
-        </body>
+		</body>
 	</html>
-    <?php
+	<?php
 
 	die();
 
@@ -1196,7 +1233,7 @@ add_action( 'wp', 'mp_stacks_sermongrid_post_output' );
  * @param    void
  * @return   void
  */
-function mp_stacks_sermongrid_wp_login_form(){
+function mp_stacks_sermongrid_wp_login_form() {
 
 	return '<form id="wp-signin">
 
