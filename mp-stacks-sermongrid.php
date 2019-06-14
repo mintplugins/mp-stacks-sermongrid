@@ -105,7 +105,7 @@ function mp_stacks_sermongrid_include_files(){
 	/**
 	 * If mp_core or mp_stacks aren't active, stop and install it now
 	 */
-	if ( !function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain') || !class_exists( 'Church_Theme_Content' ) ){
+	if ( ! function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain') || ( ! class_exists( 'Church_Theme_Content' ) && ! class_exists( 'SermonManager' ) ) ){
 
 		/**
 		 * Include Plugin Checker
@@ -130,7 +130,9 @@ function mp_stacks_sermongrid_include_files(){
 		/**
 		 * Check if Church Theme Content plugin is installed
 		 */
-		include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/church-theme-content.php' );
+		if ( ! class_exists( 'SermonManager' ) ) {
+			include_once( MP_STACKS_SERMONGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/church-theme-content.php' );
+		}
 
 	}
 	/**
