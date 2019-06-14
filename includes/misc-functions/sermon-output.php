@@ -557,6 +557,8 @@ function mp_stacks_sermongrid_post_output() {
 
 				<?php
 
+				$wrap_media_in_custom_html_tag = true;
+
 				// Get the popup Media Content URLs.
 				if ( 'ctc_sermon' === $post_type ) {
 					$video_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_video' );
@@ -564,8 +566,17 @@ function mp_stacks_sermongrid_post_output() {
 				}
 
 				if ( 'wpfc_sermon' === $post_type ) {
+
 					$video_value = mp_core_get_post_meta( $post_id, 'sermon_video' );
-					$video_value = empty( $video_value ) ? mp_core_get_post_meta( $post_id, 'sermon_video_link' ) : false;
+					$video_value = empty( $video_value ) ? mp_core_get_post_meta( $post_id, 'sermon_video_link' ) : $video_value;
+					$video_value = wpfc_render_video( $video_value );
+
+					// If this is a facebook video, use wpfc's facebook media embedding option.
+					if ( strpos( $video_value, 'facebook.' ) !== false ) {
+						echo '<script type="text/javascript" src="' . SM_URL . 'assets/vendor/js/facebook-video.js' . '"></script>';
+						$wrap_media_in_custom_html_tag = false;
+					}
+
 					$audio_value = mp_core_get_post_meta( $post_id, 'sermon_audio' );
 				}
 
@@ -622,22 +633,28 @@ function mp_stacks_sermongrid_post_output() {
 						'autoplay_videos' => true,
 					);
 
-					// If we are on an iPhone, it handled HTML5 player strangely, so output a link only.
-					if ( mp_core_is_iphone() && $audio_only ) {
-						$content_html = '<a style="width:100%; height:250px; text-align:center; font-size:180px; color:#545454;" href="' . $content_url . '">&#9658;</a>';
+					if ( $wrap_media_in_custom_html_tag ) {
+						// If we are on an iPhone, it handled HTML5 player strangely, so output a link only.
+						if ( mp_core_is_iphone() && $audio_only ) {
+							$content_html = '<a style="width:100%; height:250px; text-align:center; font-size:180px; color:#545454;" href="' . $content_url . '">&#9658;</a>';
+						} else {
+							$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
+						}
+
+						// If we were able to wrap the content, show it.
+						if ( trim( $content_html ) !== trim( $content_url ) ) {
+
+							echo $content_html;
+
+							$media_to_show = true;
+
+						} else {
+							echo $content_url;
+							$media_to_show = true;
+						}
 					} else {
-						$content_html = mp_core_wrap_media_url_in_html_tag( $content_url, $args );
-					}
-
-					// If we were able to wrap the content, show it.
-					if ( trim( $content_html ) !== trim( $content_url ) ) {
-
-						echo $content_html;
-
+						echo $content_url;
 						$media_to_show = true;
-
-					} else {
-						$media_to_show = false;
 					}
 					?>
 
