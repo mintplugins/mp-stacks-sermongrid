@@ -569,12 +569,12 @@ function mp_stacks_sermongrid_post_output() {
 
 					$video_value = mp_core_get_post_meta( $post_id, 'sermon_video' );
 					$video_value = empty( $video_value ) ? mp_core_get_post_meta( $post_id, 'sermon_video_link' ) : $video_value;
-					$video_value = wpfc_render_video( $video_value );
 
 					// If this is a facebook video, use wpfc's facebook media embedding option.
 					if ( strpos( $video_value, 'facebook.' ) !== false ) {
 						echo '<script type="text/javascript" src="' . SM_URL . 'assets/vendor/js/facebook-video.js' . '"></script>';
 						$wrap_media_in_custom_html_tag = false;
+						$video_value = wpfc_render_video( $video_value );
 					}
 
 					$audio_value = mp_core_get_post_meta( $post_id, 'sermon_audio' );
