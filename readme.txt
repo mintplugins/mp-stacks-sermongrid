@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 5.3
-Stable tag: 1.0.1.3
+Stable tag: 1.0.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.4 = June 17, 2019
+* Fix: Make sure wpfc array is array in metabox
 
 = 1.0.1.3 = June 15, 2019
 * Add support for Sermon Manager plugin. You can now use sermons from either Church Content or Sermon Manager with SermonGrid.
