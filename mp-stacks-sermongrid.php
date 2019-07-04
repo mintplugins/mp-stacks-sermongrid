@@ -3,7 +3,7 @@
 Plugin Name: MP Stacks + SermonGrid
 Plugin URI: http://mintplugins.com
 Description: Display Sermon Content in a Grid on a Church website using MP Stacks.
-Version: 1.0.1.4
+Version: 1.0.1.5
 Author: Mint Plugins
 Author URI: https://mintplugins.com
 Text Domain: mp_stacks_sermongrid
@@ -11,7 +11,7 @@ Domain Path: languages
 License: GPL2
 */
 
-/*  Copyright 2016  Phil Johnston  (email : phil@mintplugins.com)
+/*  Copyright 2019  Phil Johnston  (email : phil@mintplugins.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_SERMONGRID_VERSION' ) )
-	define( 'MP_STACKS_SERMONGRID_VERSION', '1.0.1.4' );
+	define( 'MP_STACKS_SERMONGRID_VERSION', '1.0.1.5' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_SERMONGRID_PLUGIN_URL' ) )
