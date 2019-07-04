@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * This file contains the function which set up the Load More button/Pagination in the Grid
  *
@@ -23,14 +23,14 @@
  * @param    $items_array Array - The existing Meta Options in this Array
  * @return   Array - The Items Array with the Isotope Options added
 */
-function mp_stacks_sermongrid_add_isotope_meta( $items_array ){
-	
+function mp_stacks_sermongrid_add_isotope_meta( $items_array ) {
+
 	$meta_prefix = 'sermongrid';
-			
+
 	$new_items_array = mp_core_insert_meta_fields( $items_array, mp_stacks_grid_isotope_meta( $meta_prefix ), $meta_prefix . '_meta_hook_anchor_1' );
-	
+
 	return $new_items_array;
-	
+
 }
 add_filter( 'mp_stacks_' . 'sermongrid' . '_items_array', 'mp_stacks_sermongrid_add_isotope_meta', 13 );
 
@@ -43,18 +43,18 @@ add_filter( 'mp_stacks_' . 'sermongrid' . '_items_array', 'mp_stacks_sermongrid_
  * @param    $isotope_filter_groups Array - Coming in its value is an empty array
  * @return   Array - Returning out, it is an array containing the Filter Groups that the user can choose from.
 */
-function mp_stacks_sermongrid_isotope_filter_group_options( $isotope_filter_groups ){
-	
-	//This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.			
+function mp_stacks_sermongrid_isotope_filter_group_options( $isotope_filter_groups ) {
+
+	//This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.
 	$isotope_filter_groups = mp_stacks_sermongrid_isotope_filter_groups();
-	
+
 	//Simplify the array to just be a key => value pair with strings on both sides.
-	foreach( $isotope_filter_groups as $isotope_filter_group_id => $isotope_filter_group ){
-		$meta_isotope_filter_group_array[$isotope_filter_group_id] = $isotope_filter_group['filter_group_name'];
+	foreach ( $isotope_filter_groups as $isotope_filter_group_id => $isotope_filter_group ) {
+		$meta_isotope_filter_group_array[ $isotope_filter_group_id ] = $isotope_filter_group['filter_group_name'];
 	}
-	
+
 	return $meta_isotope_filter_group_array;
-	
+
 }
 add_filter( 'sermongrid' . '_isotope_filter_groups', 'mp_stacks_sermongrid_isotope_filter_group_options' );
 
@@ -67,49 +67,94 @@ add_filter( 'sermongrid' . '_isotope_filter_groups', 'mp_stacks_sermongrid_isoto
  * @param    $isotope_filter_groups Array - Coming in its value is an empty array
  * @return   Array - Returning out it is an array containing the Filter Groups that the user can choose from.
 */
-function mp_stacks_sermongrid_isotope_filter_groups(){
-	
-	//This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.			
-	$isotope_filter_groups = array( 
-		'ctc_sermon_topic' => array( 
-			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Sermon Topics', 'mp_stacks_sermongrid' ),
+function mp_stacks_sermongrid_isotope_filter_groups() {
+
+	$isotope_filter_groups = array();
+
+	if ( class_exists( 'Church_Theme_Content' ) ) {
+		// This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.
+		$isotope_filter_groups['ctc_sermon_topic'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Topics', 'mp_stacks_sermongrid' ),
 			'meta_field_ids_representing_tax_term' => array(),
-			//Icon info
-			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
-			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
-		),
-		'ctc_sermon_book' => array( 
-			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Sermon Books', 'mp_stacks_sermongrid' ),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['ctc_sermon_book'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Books', 'mp_stacks_sermongrid' ),
 			'meta_field_ids_representing_tax_term' => array(),
-			//Icon info
-			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
-			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
-		),
-		'ctc_sermon_series' => array( 
-			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Sermon Series', 'mp_stacks_sermongrid' ),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['ctc_sermon_series'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Series', 'mp_stacks_sermongrid' ),
 			'meta_field_ids_representing_tax_term' => array(),
-			//Icon info
-			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
-			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
-		),
-		'ctc_sermon_speaker' => array( 
-			'is_wordpress_taxonomy' => true,
-			'filter_group_name' => __( 'Sermon Speakers', 'mp_stacks_sermongrid' ),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['ctc_sermon_speaker'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Speakers', 'mp_stacks_sermongrid' ),
 			'meta_field_ids_representing_tax_term' => array(),
-			//Icon info
-			'default_icon_font_string' => 'fa-th-large', //A default icon-font class string to use if no unique icon is given
-			'default_icon_image_url' => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), //A default url to use if no unique icon is given
-		),
-		
-	);
-	
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+	}
+
+	if ( class_exists( 'SermonManager' ) ) {
+		// This array can contain custom groups (for outside sources like instgram), AND/OR WordPress taxonomy slugs.
+		$isotope_filter_groups['wpfc_sermon_topics'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Topics', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['wpfc_bible_book'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Bible Books', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['wpfc_sermon_series'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Series', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['wpfc_preacher'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Sermon Preacher', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+		$isotope_filter_groups['wpfc_service_type'] = array(
+			'is_wordpress_taxonomy'                => true,
+			'filter_group_name'                    => __( 'Service Type', 'mp_stacks_sermongrid' ),
+			'meta_field_ids_representing_tax_term' => array(),
+			// Icon info.
+			'default_icon_font_string'             => 'fa-th-large', // A default icon-font class string to use if no unique icon is given.
+			'default_icon_image_url'               => plugins_url( '/assets/images/user-icon.png', dirname( dirname( __FILE__ ) ) ), // A default url to use if no unique icon is given.
+		);
+	}
+
 	$isotope_filter_groups = apply_filters( 'mp_stacks_sermongrid_isotope_filter_groups', $isotope_filter_groups );
-	
+
 	return $isotope_filter_groups;
-	
+
 }
 
 /**
@@ -122,15 +167,15 @@ function mp_stacks_sermongrid_isotope_filter_groups(){
  * @param    $meta_prefix String - The meta prefix used for this grid. In this case it is 'socialgrid'
  * @return   String - Returning out it is the icon font class name as a string
 */
-function mp_stacks_sermongrid_all_icon( $isotope_icon, $meta_prefix ){
-	
-	if ( $meta_prefix != 'sermongrid' ){
-		return $isotope_icon;	
+function mp_stacks_sermongrid_all_icon( $isotope_icon, $meta_prefix ) {
+
+	if ( $meta_prefix != 'sermongrid' ) {
+		return $isotope_icon;
 	}
-	
+
 	return 'fa-th-large';
 }
-add_filter( 'mp_stacks_grid_isotope_all_icon_font_class', 'mp_stacks_sermongrid_all_icon', 10, 2);
+add_filter( 'mp_stacks_grid_isotope_all_icon_font_class', 'mp_stacks_sermongrid_all_icon', 10, 2 );
 
 /**
  * Add the orderby options for "Sort by Date, Most Comments" to the SermonGrid Metabox
@@ -142,12 +187,12 @@ add_filter( 'mp_stacks_grid_isotope_all_icon_font_class', 'mp_stacks_sermongrid_
  * @param    $meta_prefix string - the meta prefix for this grid add-on
  * @return   $orderby_options Array - The newly added orderby options for this grid addon
 */
-function mp_stacks_sermongrid_orderby_options( $orderby_options, $meta_prefix ){
+function mp_stacks_sermongrid_orderby_options( $orderby_options, $meta_prefix ) {
 	$orderby_options['date_newest_to_oldest'] = __( 'Newest', 'mp_stacks_' . $meta_prefix );
 	$orderby_options['date_oldest_to_newest'] = __( 'Oldest', 'mp_stacks_' . $meta_prefix );
-	$orderby_options['random'] = __( 'Random', 'mp_stacks_' . $meta_prefix );
-	$orderby_options['most_comments'] = __( 'Most Comments', 'mp_stacks_' . $meta_prefix );
-	
+	$orderby_options['random']                = __( 'Random', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['most_comments']         = __( 'Most Comments', 'mp_stacks_' . $meta_prefix );
+
 	return $orderby_options;
 }
 add_filter( 'sermongrid' . '_isotope_orderby_options', 'mp_stacks_sermongrid_orderby_options', 10, 2 );
