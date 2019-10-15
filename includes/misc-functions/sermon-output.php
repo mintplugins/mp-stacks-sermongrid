@@ -48,7 +48,7 @@ function mp_stacks_sermongrid_post_output() {
 	// If we are not supposed to show an mp_sermongrid_post, get out of here.
 	if (
 		! isset( $wp_query->query['post_type'] ) ||
-		( isset( $wp_query->query['post_type'] ) && 'ctc_sermon' !== $wp_query->query['post_type'] && 'wpfc_sermon' !== $wp_query->query['post_type'] ) ||
+		( isset( $wp_query->query['post_type'] ) && 'ctc_sermon' !== $wp_query->query['post_type'] && 'wpfc_sermon' !== $wp_query->query['post_type'] && 'cpt_sermon' !== $wp_query->query['post_type'] ) ||
 		is_admin()
 	) {
 		return;
@@ -559,6 +559,12 @@ function mp_stacks_sermongrid_post_output() {
 
 				$wrap_media_in_custom_html_tag = true;
 
+				// Get the popup Media Content URLs (legacy Mint Themes).
+				if ( 'cpt_sermon' === $post_type ) {
+					$video_value = false;
+					$audio_value = mp_core_get_post_meta( $post_id, 'sermonmp3' );
+				}
+
 				// Get the popup Media Content URLs.
 				if ( 'ctc_sermon' === $post_type ) {
 					$video_value = mp_core_get_post_meta( $post_id, '_ctc_sermon_video' );
@@ -809,7 +815,7 @@ function mp_stacks_sermongrid_post_output() {
 
 					<div class="content-block description selected">
 
-						<div id="description-container"><?php echo wp_kses_post( do_shortcode( $post_description ) ); ?></div>
+						<div id="description-container"><?php echo do_shortcode( $post_description ); ?></div>
 
 					</div>
 
