@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 5.3
-Stable tag: 1.0.1.5
+Stable tag: 1.0.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.6 = October 14, 2019
+* Added bypass for CTC PRO menu being hidden.
+* Added basic support for legacy post type from Mint Themes for sermons, "cpt_sermon".
 
 = 1.0.1.5 = July 4, 2019
 * Add isotope filtering options from WPFC
