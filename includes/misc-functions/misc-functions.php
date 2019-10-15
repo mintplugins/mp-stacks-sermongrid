@@ -89,28 +89,33 @@ function mp_stacks_sermongrid_sermon_feed_redirect(){
 add_action( 'template_redirect', 'mp_stacks_sermongrid_sermon_feed_redirect' );
 
 /**
-* Remove menu links from Church Theme Content (they contain unneeded ads which have confused many users)
-*/
+ * Remove menu links from Church Theme Content (they contain unneeded ads which have confused many users)
+ */
 function mp_stacks_sermongrid_remove_church_theme_content_menu_settings() {
-		global $wp_filter;
+	global $wp_filter;
 
-		// Remove the podcast items under the sermons
-		remove_action( 'admin_menu', 'ctc_add_settings_menu_links' );
+	// Don't hide the menu if they have bought Church Content Pro.
+	if ( class_exists( 'Church_Content_Pro' ) ) {
+		return false;
+	}
 
-		// Remove the CTC settings panel under the WP settings. This is a bit tougher to do because it's inside a class.
-		//Loop through each priority in the admin_menu hooks
-		foreach( $wp_filter['admin_menu']->callbacks as $priority => $hooked_functions ) {
-			// Loop through each action hooked at this priority
-			foreach( $hooked_functions as $function_key => $hooked_function_data ) {
+	// Remove the podcast items under the sermons.
+	remove_action( 'admin_menu', 'ctc_add_settings_menu_links' );
 
-				if ( strpos( $function_key, 'add_page' ) !== false ) {
-					if ( $hooked_function_data['function'][0] instanceof CT_Plugin_Settings ) {
-						// Remove the add_page method from the list of hooked functions to admin_menu
-						unset( $hooked_functions[$function_key] );
-						$wp_filter['admin_menu']->callbacks[$priority] = $hooked_functions;
-					}
+	// Remove the CTC settings panel under the WP settings. This is a bit tougher to do because it's inside a class.
+	// Loop through each priority in the admin_menu hooks.
+	foreach ( $wp_filter['admin_menu']->callbacks as $priority => $hooked_functions ) {
+		// Loop through each action hooked at this priority.
+		foreach ( $hooked_functions as $function_key => $hooked_function_data ) {
+
+			if ( strpos( $function_key, 'add_page' ) !== false ) {
+				if ( $hooked_function_data['function'][0] instanceof CT_Plugin_Settings ) {
+					// Remove the add_page method from the list of hooked functions to admin_menu.
+					unset( $hooked_functions[ $function_key ] );
+					$wp_filter['admin_menu']->callbacks[ $priority ] = $hooked_functions;
 				}
 			}
 		}
+	}
 }
 add_action( 'admin_menu', 'mp_stacks_sermongrid_remove_church_theme_content_menu_settings', 0 );
