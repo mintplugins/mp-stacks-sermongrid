@@ -119,3 +119,20 @@ function mp_stacks_sermongrid_remove_church_theme_content_menu_settings() {
 	}
 }
 add_action( 'admin_menu', 'mp_stacks_sermongrid_remove_church_theme_content_menu_settings', 0 );
+
+/**
+ * Use the podcast URL from CTC Pro if it is active.
+ *
+ * @param string $feed_url The url to the podcast feed.
+ * @return string $feed_url The url to the podcast feed.
+ */
+function mp_stacks_sermongrid_use_ctcpro_podcast_url( $feed_url ) {
+
+	if ( ! class_exists( 'Church_Content_Pro' ) ) {
+		return $feed_url;
+	}
+
+	return ctc_podcast_feed_url();
+
+}
+add_filter( 'mp_stacks_sermongrid_podcast_feed_url', 'mp_stacks_sermongrid_use_ctcpro_podcast_url' );
