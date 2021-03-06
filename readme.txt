@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 5.3
-Stable tag: 1.0.1.6
+Tested up to: 5.7
+Stable tag: 1.0.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.7 = March 6, 2021
+Fix for Old Mint Themes sermon post type (cpt_sermons plural), and escaping special characters on the title.
 
 = 1.0.1.6 = October 14, 2019
 * Added bypass for CTC PRO menu being hidden.
