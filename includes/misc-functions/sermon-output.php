@@ -48,7 +48,7 @@ function mp_stacks_sermongrid_post_output() {
 	// If we are not supposed to show an mp_sermongrid_post, get out of here.
 	if (
 		! isset( $wp_query->query['post_type'] ) ||
-		( isset( $wp_query->query['post_type'] ) && 'ctc_sermon' !== $wp_query->query['post_type'] && 'wpfc_sermon' !== $wp_query->query['post_type'] && 'cpt_sermon' !== $wp_query->query['post_type'] ) ||
+		( isset( $wp_query->query['post_type'] ) && 'ctc_sermon' !== $wp_query->query['post_type'] && 'wpfc_sermon' !== $wp_query->query['post_type'] && 'cpt_sermon' !== $wp_query->query['post_type'] && 'cpt_sermons' !== $wp_query->query['post_type'] ) ||
 		is_admin()
 	) {
 		return;
@@ -560,7 +560,7 @@ function mp_stacks_sermongrid_post_output() {
 				$wrap_media_in_custom_html_tag = true;
 
 				// Get the popup Media Content URLs (legacy Mint Themes).
-				if ( 'cpt_sermon' === $post_type ) {
+				if ( 'cpt_sermon' === $post_type || 'cpt_sermons' === $post_type ) {
 					$video_value = false;
 					$audio_value = mp_core_get_post_meta( $post_id, 'sermonmp3' );
 				}
@@ -705,7 +705,7 @@ function mp_stacks_sermongrid_post_output() {
 							</div>
 
 							<span>
-								<h1 class="text"><?php echo esc_textarea( $post_title ); ?></h1>
+								<h1 class="text"><?php echo esc_html( $post_title ); ?></h1>
 							</span>
 
 						</div>
@@ -893,7 +893,7 @@ function mp_stacks_sermongrid_post_output() {
 												echo '<img src="' . $featured_image . '" width="100%" />';
 											echo '</div>';
 											echo '<div class="sermon-title">';
-												echo get_the_title();
+												echo esc_html( get_the_title() );
 											echo '</div>';
 										echo '</a>';
 
